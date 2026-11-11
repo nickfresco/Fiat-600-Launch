@@ -345,7 +345,7 @@ window.dash = (() => {
         <div class="f6-card" id="por-canal">
           <h3>Medios vs. cuentas personales de periodistas</h3>
           <div class="f6-chart" data-draw="chart_canal" data-source="lanz" style="min-height:100px"></div>
-          <p class="f6-note">"Cuenta personal" son publicaciones de periodistas en sus propias cuentas (por ejemplo, Paola Leyton o Leo Pacheco), aunque trabajen en un medio invitado.</p>
+          <p class="f6-note">"Cuenta personal" son publicaciones de periodistas en sus propias cuentas (por ejemplo, Soy Pao Leyton o Leo Pacheco), aunque trabajen en un medio invitado.</p>
         </div>
         <div class="f6-card" id="por-formato">
           <h3>Formato: permanente vs. efímero</h3>
@@ -590,10 +590,6 @@ window.dash = (() => {
       </table>
     </div>
     <div class="f6-grid2">
-      <div class="f6-card" id="correo">
-        <header><h3>Distribución del comunicado</h3><p class="f6-note">Envío del 10/11 a la base de prensa, con copia oculta.</p></header>
-        <div data-draw="correo_panel" data-source="envio"></div>
-      </div>
     </div>
   </section>
 
@@ -646,7 +642,7 @@ window.dash = (() => {
       <div class="f6-card" id="historial">
         <h3>Historial de actualizaciones</h3>
         <ul class="f6-list" data-draw="historial" data-source="historial"></ul>
-        <p class="f6-note">Las publicaciones se cuentan una vez por enlace, aunque se registren de nuevo. Cada actualización de datos queda registrada aquí.</p>
+        <p class="f6-note">Las publicaciones se cuentan una vez por enlace, aunque se registren de nuevo. Los comentarios, hallazgos, riesgos y el plan se actualizan cuando se pide una nueva versión, y cada cambio queda registrado aquí.</p>
       </div>
     </div>
   </section>
@@ -668,7 +664,7 @@ dash.loader('grilla', {
 // ---------- Cálculos ----------
 dash.calc('lanz', {
   title: 'Publicaciones del lanzamiento',
-  description: 'Registros de la campaña LANZAMIENTO FIAT 600 con fase (previa, día del lanzamiento o posterior), formato, canal (medio, cuenta personal de periodista o creador, según el archivo de cuentas) y control de duplicados por enlace.',
+  description: 'Registros de la campaña LANZAMIENTO FIAT 600 con fase (previa, día del lanzamiento o posterior), formato, canal (medio, cuenta personal de periodista o creador, según el archivo de cuentas) y control de duplicados por enlace. El archivo de cuentas también puede fijar el nombre con que se muestra una cuenta y su tier.',
   inputs: ['grilla', 'cuentas'],
   fn: (grilla, cuentas) => {
     const iso = (f) => { const p = String(f || '').split('/'); return p.length === 3 ? `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}` : ''; };
@@ -682,20 +678,21 @@ dash.calc('lanz', {
         const fecha_iso = iso(r.fecha);
         const titulo = String(r.titulo || '');
         const link = String(r.link || '');
-        const medio = String(r.medio || '').trim();
+        const medioGrilla = String(r.medio || '').trim();
         let formato = 'Post IG';
         if (/\(historia/i.test(titulo)) formato = 'Historia IG';
         else if (r.tipo_medio === 'Web') formato = 'Nota web';
         else if (r.tipo_medio === 'Facebook') formato = 'Facebook';
         else if (/\/reel\//.test(link)) formato = 'Reel';
         const fase = fecha_iso < lanzamiento ? 'Pre-evento' : (fecha_iso === lanzamiento ? 'Día del lanzamiento' : 'Post-lanzamiento');
-        const c = cmap.get(medio.toLowerCase());
+        const c = cmap.get(medioGrilla.toLowerCase());
+        const medio = (c && c.nombre) || medioGrilla;
         const clave = norm(link) || ('sin-enlace|' + medio + '|' + titulo + '|' + fecha_iso);
         const claveCuenta = medio.toLowerCase() + '|' + clave;
         const repetida = vistosCuenta.has(claveCuenta) ? 'Sí' : 'No';
         const unica = vistos.has(clave) ? 'No' : 'Sí';
         vistos.add(clave); vistosCuenta.add(claveCuenta);
-        return { fila: String(r.fila), fecha: r.fecha, fecha_iso, fase, evento: fase === 'Pre-evento' ? 'No' : 'Sí', medio, canal: c ? c.canal : 'Sin clasificar', medio_padre: c ? c.medio_padre : medio, canal_verificacion: c ? c.verificacion : 'Por validar', titulo, formato, permanente: formato === 'Historia IG' ? 'No' : 'Sí', tipo_medio: r.tipo_medio, gestion: r.gestion, tier: r.tier || 'Sin tier', reputacion: r.reputacion || 'Sin dato', voceria: r.voceria, link, clave, unica, repetida };
+        return { fila: String(r.fila), fecha: r.fecha, fecha_iso, fase, evento: fase === 'Pre-evento' ? 'No' : 'Sí', medio, canal: c ? c.canal : 'Sin clasificar', medio_padre: c ? c.medio_padre : medio, canal_verificacion: c ? c.verificacion : 'Por validar', titulo, formato, permanente: formato === 'Historia IG' ? 'No' : 'Sí', tipo_medio: r.tipo_medio, gestion: r.gestion, tier: (c && c.tier) || r.tier || 'Sin tier', reputacion: r.reputacion || 'Sin dato', voceria: r.voceria, link, clave, unica, repetida };
       });
   }
 });
@@ -829,12 +826,6 @@ dash.calc('msg_matriz', {
   }
 });
 
-dash.calc('envio_calc', {
-  title: 'Correos entregados',
-  description: 'Destinatarios del comunicado menos rebotes, según el último registro guardado.',
-  inputs: ['envio'],
-  fn: (envio) => envio.length ? Number(envio[0].destinatarios) - Number(envio[0].rebotes) : null
-});
 
 dash.calc('soc_resumen', {
   title: 'Resumen de comentarios',
@@ -1226,7 +1217,7 @@ dash.draw('chart_embudo', (el) => {
 dash.draw('tracker', (tb) => {
   const s = dash.data('seguimiento'); tb.replaceChildren(); if (s.status !== 'ok') return;
   const orden = { 'PENDIENTE': 0, 'EN SEGUIMIENTO': 1, 'PUBLICADO': 2 };
-  const tipoOrden = { 'Invitado': 0, 'Invitado especial': 1, 'No invitado': 2, 'Prensa previa': 3, 'Rebote del envío': 4 };
+  const tipoOrden = { 'Invitado': 0, 'Invitado especial': 1, 'No invitado': 2, 'Prensa previa': 3 };
   const rows = s.data.filter((r) => (!f6.ttipo || r.tipo === f6.ttipo) && (!f6.test || r.estado === f6.test) && (!f6.tver || r.verificacion === f6.tver))
     .sort((a, b) => (tipoOrden[a.tipo] ?? 9) - (tipoOrden[b.tipo] ?? 9) || orden[a.estado] - orden[b.estado]);
   rows.forEach((r) => {
@@ -1238,13 +1229,6 @@ dash.draw('tracker', (tb) => {
     tb.appendChild(tr);
   });
   if (!rows.length) { const tr = f6el('tr'); f6cell(tr, 'No hay contactos con estos filtros.').colSpan = 8; tb.appendChild(tr); }
-});
-dash.draw('correo_panel', (el) => {
-  const f = dash.data('envio'); if (f6status(el, f)) return;
-  const e = f.data[0]; const k = f6el('div', 'f6-kpis');
-  const kpi = (n, l) => { const d = f6el('div', 'f6-kpi'); d.append(f6el('span', 'n', f6fmt(n)), f6el('span', 'l', l)); return d; };
-  k.append(kpi(+e.destinatarios, 'Destinatarios'), kpi(+e.destinatarios - +e.rebotes, 'Entregados'), kpi(+e.rebotes, 'Rebotes'));
-  el.replaceChildren(k, f6el('p', 'f6-note', 'Envío del ' + e.fecha + '. Los rebotes se reenviarán solo con el enlace al kit de prensa.'));
 });
 
 // ---------- Next Steps ----------
@@ -1345,7 +1329,7 @@ dash.draw('historial', (ul) => {
 dash.boot({
   grilla: 'data/grilla.json', cuentas: 'data/cuentas.json', seguimiento_base: 'data/seguimiento.json', insights: 'data/insights.json',
   riesgos: 'data/riesgos.json', plan: 'data/plan.json', pendientes: 'data/pendientes.json', historial: 'data/historial.json',
-  envio: 'data/envio.json', comentarios: 'data/comentarios.csv', meta: 'data/meta.json'
+  comentarios: 'data/comentarios.csv', meta: 'data/meta.json'
 }).then((f) => {
   const t = 'Datos actualizados: ' + f.meta.actualizado;
   document.querySelectorAll('#f6-upd, #f6-upd-foot').forEach((e) => { e.textContent = t; });

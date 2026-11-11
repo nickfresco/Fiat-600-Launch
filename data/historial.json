@@ -16,5 +16,11 @@
   "version": "v3 · versión cliente",
   "cambio": "Validación de datos: fases (previa, día del lanzamiento, posterior), canal de cada publicación (medio, cuenta personal de periodista o creador), la entrevista de Biobío del 6/11 sale de los resultados, asistencia confirmada (11 de 11), conciliación entre medios con cobertura y contactos publicados, precio lista como alerta por validar. Nueva portada ejecutiva, filtros y gráficos en todas las secciones y riesgos.",
   "fuente": "Grilla · Gmail · lista de invitados · confirmación de Nicolás"
+ },
+ {
+  "fecha": "2026-11-11 08:30",
+  "version": "v4 · ajustes de cuentas",
+  "cambio": "Soy Pao Leyton se muestra con ese nombre y como Tier 1. Auto de Ayer (historia) y Coral Menta (lifestyle) pasan a contarse como medios propios. Se quita la información del envío del comunicado y de sus rebotes.",
+  "fuente": "Indicaciones de Nicolás"
  }
 ]

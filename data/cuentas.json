@@ -1,104 +1,138 @@
 [
  {
   "cuenta": "Autocosmos",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Autocosmos",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Rutamotor",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Rutamotor",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "The Clinic",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "The Clinic",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Estilo Motor",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Estilo Motor",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Altorque",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Altorque",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Mujer y Estilo",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Mujer y Estilo",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Tuerca Aventura",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Tuerca Aventura",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Biobio Chile",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Biobío Chile",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Motor Panamericano",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Motor Panamericano",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Automujer",
+  "nombre": "",
   "canal": "Medio",
   "medio_padre": "Automujer",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Paola Leyton (Estilo Motor)",
+  "nombre": "Soy Pao Leyton",
   "canal": "Cuenta personal",
   "medio_padre": "Estilo Motor",
+  "tier": "Tier 1",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Ángeles Gana (Estilo Motor)",
+  "nombre": "",
   "canal": "Cuenta personal",
   "medio_padre": "Estilo Motor",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Cyntia Becerra (Mujer y Estilo)",
+  "nombre": "",
   "canal": "Cuenta personal",
   "medio_padre": "Mujer y Estilo",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "Leo Pacheco (El Mercurio)",
+  "nombre": "",
   "canal": "Cuenta personal",
   "medio_padre": "El Mercurio",
+  "tier": "",
   "verificacion": "Verificado"
  },
  {
   "cuenta": "AutodeayerCL",
-  "canal": "Cuenta personal",
-  "medio_padre": "El Mercurio",
-  "verificacion": "Por validar"
+  "nombre": "Auto de Ayer",
+  "canal": "Medio",
+  "medio_padre": "Auto de Ayer",
+  "tier": "",
+  "verificacion": "Verificado"
  },
  {
   "cuenta": "Coral Menta",
-  "canal": "Cuenta personal",
-  "medio_padre": "Tuerca Aventura",
-  "verificacion": "Por validar"
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Coral Menta",
+  "tier": "",
+  "verificacion": "Verificado"
  },
  {
   "cuenta": "Fito Rayo",
+  "nombre": "",
   "canal": "Creador",
   "medio_padre": "Fito Rayo",
+  "tier": "",
   "verificacion": "Verificado"
  }
 ]
