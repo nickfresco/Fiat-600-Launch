@@ -1,0 +1,1355 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>FIAT 600 · Launch Intelligence Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+  --font-anthropic-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-anthropic-serif: "Source Serif 4", Georgia, serif;
+  --color-bg: #ffffff; --color-fg: #1b1b1d; --color-fg-muted: #626670; --color-panel: #f8f8f9; --color-border-line: #e4e5e8;
+  --color-ok: #23784a; --color-warn: #a86a00; --color-bad: #c8102e;
+  --cds-chart-muted: #b3b6bd; --cds-text-secondary: #5a5e66; --cds-chart-grid: #ececef; --cds-chart-axis: #c9cbd0;
+  --cds-surface-popover: #ffffff; --cds-border: #dcdde1; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.12);
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 12px; --cds-gap-lg: 16px; --cds-gap-xl: 28px;
+  --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 18px; --cds-pad-xl: 28px; --cds-radius: 10px;
+  --cds-font-size-caption: 12px; --cds-font-size-body: 15px; --cds-font-size-heading: 17px; --cds-font-size-title: 30px;
+  --cds-font-weight-medium: 600;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #141416; --color-fg: #ececee; --color-fg-muted: #a3a6ad; --color-panel: #1c1c20; --color-border-line: #2e2f35;
+    --color-ok: #4fbf7f; --color-warn: #e0a43c; --color-bad: #ff5a6a;
+    --cds-chart-muted: #6c6f77; --cds-text-secondary: #b3b6bd; --cds-chart-grid: #2a2b30; --cds-chart-axis: #44464d;
+    --cds-surface-popover: #232328; --cds-border: #3a3b42; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.5);
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); -webkit-font-smoothing: antialiased; }
+body { padding: 24px 16px 48px; }
+.app { max-width: 1240px; margin: 0 auto; }
+.dash-select { font: inherit; font-size: 14px; color: var(--color-fg); background: var(--color-bg); border: 1px solid var(--color-border-line); border-radius: 8px; padding: 7px 30px 7px 10px; min-width: 120px; max-width: 280px; appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-fg-muted) 50%), linear-gradient(135deg, var(--color-fg-muted) 50%, transparent 50%); background-position: calc(100% - 15px) 52%, calc(100% - 10px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
+.dash-select:focus-visible { outline: 2px solid #c8102e; outline-offset: 1px; }
+.dash-skeleton { min-height: 60px; border-radius: 8px; background: linear-gradient(90deg, var(--color-panel), var(--color-border-line), var(--color-panel)); background-size: 200% 100%; animation: sk 1.2s infinite linear; }
+@keyframes sk { to { background-position: -200% 0; } }
+.f6-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--color-border-line); font-size: 12px; color: var(--color-fg-muted); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+.f6-upd { font-size: 12px; color: var(--color-fg-muted); }
+</style>
+<script>
+// Runtime mínimo compatible con el dashboard original (dash.loader / calc / draw / data)
+window.dash = (() => {
+  const loaders = {}, calcs = {}, draws = {}, cache = {}, files = {};
+  let ready = false;
+  const visible = (el) => !el.closest('[hidden]');
+  const run = (n) => document.querySelectorAll('[data-draw="' + n + '"]').forEach((el) => {
+    if (!visible(el)) { el.dataset.stale = '1'; return; }
+    try { draws[n](el); delete el.dataset.stale; } catch (e) { console.error('draw', n, e); }
+  });
+  const api = {
+    colors: ['#c8102e', '#3d6fa8', '#8a8f98', '#2e8b57', '#a35ba0'],
+    loader: (id, o) => { loaders[id] = o; },
+    calc: (id, o) => { calcs[id] = o; },
+    setLink: () => requestAnimationFrame(api.redrawVisible),
+    data: (id) => {
+      if (!ready) return { status: 'loading' };
+      if (cache[id]) return cache[id];
+      try {
+        let d;
+        if (id in files) d = files[id];
+        else if (calcs[id]) d = calcs[id].fn(...calcs[id].inputs.map((i) => { const x = api.data(i); if (x.status !== 'ok') throw new Error('sin ' + i); return x.data; }));
+        else throw new Error('sin fuente ' + id);
+        cache[id] = { status: 'ok', data: d };
+      } catch (e) { console.error('data', id, e); cache[id] = { status: 'error', error: String(e) }; }
+      return cache[id];
+    },
+    draw: (n, fn) => { if (fn) { draws[n] = fn; run(n); } else if (draws[n]) run(n); },
+    redrawAll: () => Object.keys(draws).forEach(run),
+    redrawVisible: () => document.querySelectorAll('[data-draw][data-stale]').forEach((el) => { if (visible(el)) { try { draws[el.dataset.draw](el); delete el.dataset.stale; } catch (e) { console.error(e); } } }),
+    async boot(manifest) {
+      const v = '?v=' + Date.now();
+      await Promise.all(Object.entries(manifest).map(async ([id, path]) => {
+        const r = await fetch(path + v, { cache: 'no-store' }); if (!r.ok) throw new Error(path + ' ' + r.status);
+        files[id] = path.endsWith('.csv') ? d3.csvParse(await r.text()) : await r.json();
+      }));
+      ready = true; api.redrawAll();
+      let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { document.querySelectorAll('[data-draw]').forEach((el) => { el.dataset.stale = '1'; }); api.redrawVisible(); }, 200); });
+      return files;
+    }
+  };
+  return api;
+})();
+</script>
+</head>
+<body>
+<main class="app">
+<style>
+.f6 { --f6-red: #c8102e; display: grid; gap: var(--cds-gap-xl); color: var(--color-fg); font-family: var(--font-anthropic-sans); }
+.f6 * { box-sizing: border-box; }
+.f6 [hidden] { display: none !important; }
+.f6-hero { position: relative; border-radius: var(--cds-radius); overflow: hidden; background: #111; min-height: 240px; display: grid; }
+.f6-hero-img { grid-area: 1 / 1; width: 100%; height: 100%; min-height: 240px; object-fit: cover; opacity: .5; display: block; }
+.f6-hero-text { position: relative; z-index: 1; grid-area: 1 / 1; align-self: end; padding: var(--cds-pad-xl); color: #fff; display: grid; gap: var(--cds-gap-sm); max-width: 820px; }
+.f6-eyebrow { margin: 0; font-size: var(--cds-font-size-caption); letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+.f6-hero h1 { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(28px, 5vw, 46px); line-height: 1.05; text-wrap: balance; }
+.f6-hero h1 span { color: #ff5a6a; }
+.f6-lede { margin: 0; font-size: var(--cds-font-size-body); line-height: 1.55; color: #f1f1f1; }
+.f6-lede b { font-variant-numeric: tabular-nums; }
+.f6-rule { height: 3px; width: 64px; background: var(--f6-red); border-radius: 2px; }
+.f6-tabs { display: flex; gap: var(--cds-gap-xs); overflow-x: auto; border-bottom: 1px solid var(--color-border-line); scrollbar-width: thin; position: sticky; top: 0; background: var(--color-bg); z-index: 3; }
+.f6-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; padding: var(--cds-pad-sm) var(--cds-pad-md); font: inherit; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); cursor: pointer; white-space: nowrap; }
+.f6-tab[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--f6-red); font-weight: var(--cds-font-weight-medium); }
+.f6-tab:focus-visible { outline: 2px solid var(--f6-red); outline-offset: -2px; }
+.f6-sec { display: grid; gap: var(--cds-gap-xl); }
+.f6-sec > header { display: grid; gap: var(--cds-gap-xs); }
+.f6 h2 { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); text-wrap: balance; }
+.f6 h3 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.f6-kicker { margin: 0; font-size: var(--cds-font-size-caption); letter-spacing: .08em; text-transform: uppercase; color: var(--f6-red); font-weight: var(--cds-font-weight-medium); }
+.f6-sub { margin: 0; color: var(--color-fg-muted); max-width: 78ch; line-height: 1.5; }
+.f6-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--cds-gap-md); }
+.f6-kpi { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-xs); align-content: start; position: relative; }
+.f6-kpi .n { font-family: var(--font-anthropic-serif); font-size: 36px; line-height: 1; font-variant-numeric: tabular-nums; }
+.f6-kpi .n small { font-size: 18px; color: var(--color-fg-muted); }
+.f6-kpi .l { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); line-height: 1.3; }
+.f6-kpi .d { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.4; }
+.f6-kpi.big { border-top: 3px solid var(--f6-red); }
+.f6-answers { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--cds-gap-md); }
+.f6-ans { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-sm); align-content: start; }
+.f6-ans .q { margin: 0; font-size: var(--cds-font-size-caption); text-transform: uppercase; letter-spacing: .06em; color: var(--color-fg-muted); display: flex; gap: 8px; align-items: center; }
+.f6-ans .q b { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--f6-red); color: #fff; font-size: 11px; letter-spacing: 0; }
+.f6-ans p { margin: 0; line-height: 1.5; }
+.f6-ans p b { font-variant-numeric: tabular-nums; }
+.f6-ans ol, .f6-ans ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; line-height: 1.4; }
+.f6-state { border-left: 3px solid var(--f6-red); padding: var(--cds-pad-sm) var(--cds-pad-md); background: var(--color-panel); border-radius: 0 var(--cds-radius) var(--cds-radius) 0; display: grid; gap: var(--cds-gap-xs); }
+.f6-state p { margin: 0; line-height: 1.55; }
+.f6-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--cds-gap-lg); }
+.f6-grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--cds-gap-lg); }
+.f6-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-md); min-width: 0; align-content: start; }
+.f6-card > header { display: grid; gap: 4px; }
+.f6-chart { position: relative; min-height: 160px; }
+.f6-chart svg { display: block; width: 100%; }
+.f6-chart text { fill: var(--cds-text-secondary); font-size: 12px; font-family: var(--font-anthropic-sans); }
+.f6-chart .val { fill: var(--color-fg); font-variant-numeric: tabular-nums; }
+.f6-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: 6px; padding: 6px 8px; font-size: 12px; color: var(--color-fg); white-space: nowrap; z-index: 2; }
+.f6-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.f6-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.f6-insights { display: grid; gap: var(--cds-gap-md); }
+.f6-ins { background: var(--color-panel); border: 1px solid var(--color-border-line); border-left: 3px solid var(--f6-red); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-sm); }
+.f6-ins.pend { border-style: dashed; border-left-style: solid; border-left-color: var(--color-warn); }
+.f6-ins .top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.f6-ins .num { font-family: var(--font-anthropic-serif); font-size: 22px; color: var(--f6-red); line-height: 1; }
+.f6-ins h4 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); line-height: 1.3; }
+.f6-ins dl { margin: 0; display: grid; grid-template-columns: 120px 1fr; gap: 6px 14px; }
+.f6-ins dt { font-size: var(--cds-font-size-caption); text-transform: uppercase; letter-spacing: .06em; color: var(--color-fg-muted); padding-top: 2px; }
+.f6-ins dd { margin: 0; line-height: 1.5; min-width: 0; }
+.f6-ins dd.act { font-weight: var(--cds-font-weight-medium); }
+.f6-ins .src { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+@media (max-width: 560px) { .f6-ins dl { grid-template-columns: 1fr; } }
+.f6-filters { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: end; padding: var(--cds-pad-md); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+.f6-filters label { display: grid; gap: 4px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.f6-filters .reset { appearance: none; font: inherit; font-size: 13px; background: none; border: 0; color: var(--color-fg-muted); text-decoration: underline; cursor: pointer; padding: 6px 4px; }
+.f6-tablewrap { overflow-x: auto; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+.f6 table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.f6 th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); text-transform: uppercase; letter-spacing: .05em; padding: 10px 12px; border-bottom: 1px solid var(--color-border-line); background: var(--color-panel); white-space: nowrap; }
+.f6 td { padding: 10px 12px; border-bottom: 1px solid var(--color-border-line); vertical-align: top; line-height: 1.45; }
+.f6 td.num, .f6 th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.f6 tr:last-child td { border-bottom: 0; }
+.f6 tr.pend td { background: color-mix(in srgb, var(--color-warn) 7%, transparent); }
+.f6 a { color: inherit; text-decoration-color: var(--f6-red); text-underline-offset: 3px; }
+.f6-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: var(--cds-font-weight-medium); letter-spacing: .03em; white-space: nowrap; border: 1px solid currentColor; }
+.f6-pill.ok { color: var(--color-ok); }
+.f6-pill.warn { color: var(--color-warn); }
+.f6-pill.bad { color: var(--color-bad); }
+.f6-pill.mute { color: var(--color-fg-muted); }
+.f6-ver { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 4px; font-size: 11px; font-weight: var(--cds-font-weight-medium); white-space: nowrap; }
+.f6-ver.ok { color: var(--color-ok); background: color-mix(in srgb, var(--color-ok) 12%, transparent); }
+.f6-ver.ok::before { content: "✓"; }
+.f6-ver.pend { color: var(--color-warn); border: 1px dashed currentColor; }
+.f6-ver.pend::before { content: "!"; font-weight: 700; }
+.f6-chips { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); }
+.f6-chip { appearance: none; font: inherit; font-size: 13px; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg); cursor: pointer; }
+.f6-chip[aria-pressed="true"] { border-color: var(--f6-red); box-shadow: inset 0 0 0 1px var(--f6-red); }
+.f6-chip:focus-visible { outline: 2px solid var(--f6-red); }
+.f6-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--cds-gap-sm); }
+.f6-piece { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md); display: grid; gap: 6px; background: var(--color-panel); min-width: 0; }
+.f6-piece .m { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); display: flex; justify-content: space-between; gap: 8px; }
+.f6-piece .t { line-height: 1.4; overflow-wrap: anywhere; }
+.f6-list { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; line-height: 1.5; }
+.f6-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; line-height: 1.45; }
+.f6 details > summary { cursor: pointer; color: var(--color-fg-muted); }
+.f6-cloud { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; min-height: 120px; line-height: 1.1; }
+.f6-cloud span { font-family: var(--font-anthropic-serif); color: var(--color-fg); }
+.f6-cloud span.neg { color: var(--color-bad); }
+.f6-quotes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-height: 520px; overflow-y: auto; }
+.f6-quotes li { display: grid; grid-template-columns: 76px 1fr; gap: 10px; align-items: start; line-height: 1.45; }
+.f6-quotes .q { overflow-wrap: anywhere; }
+.f6-quotes .w { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); display: block; }
+.f6-recon { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--cds-gap-md); }
+.f6-recon div { border-left: 2px solid var(--color-border-line); padding-left: var(--cds-pad-md); display: grid; gap: 4px; }
+.f6-recon b.n { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 28px; line-height: 1; }
+.f6-recon p { margin: 0; line-height: 1.45; font-size: 13px; }
+.f6-risks { display: grid; gap: var(--cds-gap-sm); }
+.f6-risk { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: start; padding: var(--cds-pad-md); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); }
+.f6-risk.pend { border-style: dashed; }
+.f6-risk .lv { grid-row: span 2; }
+.f6-risk h4 { margin: 0; font-size: 14px; font-weight: var(--cds-font-weight-medium); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.f6-risk p { margin: 0; font-size: 13px; line-height: 1.45; color: var(--color-fg-muted); }
+.f6-heat td.c { text-align: center; font-variant-numeric: tabular-nums; min-width: 44px; }
+.f6-heat th.v { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; padding: 8px 6px; height: 190px; vertical-align: bottom; text-transform: none; letter-spacing: 0; text-align: left; }
+.f6-cal { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--cds-gap-sm); align-items: start; }
+.f6-day { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-sm); display: grid; gap: 6px; align-content: start; background: var(--color-panel); min-height: 92px; }
+.f6-day.wk { background: transparent; }
+.f6-day.today { border-color: var(--f6-red); }
+.f6-day .h { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); text-transform: uppercase; letter-spacing: .05em; display: flex; justify-content: space-between; }
+.f6-day .it { font-size: 12px; line-height: 1.35; padding-left: 8px; border-left: 3px solid var(--color-warn); }
+.f6-day .it.alta { border-left-color: var(--f6-red); }
+.f6-mailev { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; }
+.f6-mailev li { display: grid; grid-template-columns: 54px 92px 1fr; gap: 8px; }
+.f6-mailev .t { color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+[data-dash-source-state=refreshing] { opacity: .5; }
+</style>
+
+<div class="f6">
+  <header class="f6-hero" id="portada">
+    <img class="f6-hero-img" alt="Volante del nuevo FIAT 600 Hybrid con la insignia 600" src="data:image/jpeg;base64,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">
+    <div class="f6-hero-text">
+      <p class="f6-eyebrow">ALTA Comunicación para Stellantis · Lanzamiento FIAT 600 Hybrid · Chile, 10 de noviembre de 2026</p>
+      <div class="f6-rule"></div>
+      <h1>FIAT 600 <span>Launch Intelligence Report</span></h1>
+      <p class="f6-lede">Asistieron <b data-draw="h_asist" data-source="conv" data-field="asistieron" data-row="0">—</b> de <b data-draw="h_invit" data-source="conv" data-field="periodistas_invitados" data-row="0">—</b> periodistas invitados y <b data-draw="h_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</b> de <b data-draw="h_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</b> medios ya tienen cobertura. Desde el evento hay <b data-draw="h_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</b> publicaciones únicas, con <b data-draw="h_pos" data-source="kpis" data-field="pct_positivo" data-row="0">—</b>% de tono positivo en el clipping.</p>
+    </div>
+  </header>
+
+  <nav class="f6-tabs" role="tablist" aria-label="Secciones del informe">
+    <button class="f6-tab" role="tab" data-tab="resumen" aria-selected="true">Resumen ejecutivo</button>
+    <button class="f6-tab" role="tab" data-tab="prensa" aria-selected="false">Media Intelligence</button>
+    <button class="f6-tab" role="tab" data-tab="conversacion" aria-selected="false">Social Listening</button>
+    <button class="f6-tab" role="tab" data-tab="mensajes" aria-selected="false">Message Tracking</button>
+    <button class="f6-tab" role="tab" data-tab="contenidos" aria-selected="false">Contenidos</button>
+    <button class="f6-tab" role="tab" data-tab="medios" aria-selected="false">Media Relationship Tracker</button>
+    <button class="f6-tab" role="tab" data-tab="proximos" aria-selected="false">Next Steps</button>
+  </nav>
+
+  <!-- A. RESUMEN EJECUTIVO -->
+  <section class="f6-sec" id="resumen" data-panel="resumen">
+    <header>
+      <p class="f6-kicker">Resumen ejecutivo</p>
+      <h2>El lanzamiento en un minuto</h2>
+      <p class="f6-sub">Evento íntimo en Hilaria, martes 10 de noviembre a las 14:00, con Fito Rayo y su FIAT 600 de 1969. Las cifras de prensa salen de la grilla de clipping; solo cuentan publicaciones desde el 10/11 y cada pieza se cuenta una vez. <span class="f6-upd" id="f6-upd">Cargando datos…</span></p>
+      <div class="f6-legend"><span><span class="f6-ver ok">Verificado</span> dato con fuente confirmada</span><span><span class="f6-ver pend">Por validar</span> pendiente de confirmación, no usar como dato final</span></div>
+    </header>
+
+    <div class="f6-kpis" id="kpis">
+      <div class="f6-kpi big"><span class="n" data-draw="k_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</span><span class="l">Publicaciones únicas del evento</span><span class="d"><span data-draw="k_perm" data-source="kpis" data-field="permanentes" data-row="0">—</span> permanentes (notas web, posts, reels) y <span data-draw="k_hist" data-source="kpis" data-field="historias" data-row="0">—</span> historias de 24 horas</span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</span><small> / <span data-draw="k_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</span></small></span><span class="l">Medios invitados con cobertura</span><span class="d"><span data-draw="k_medcanal" data-source="conv" data-field="medios_canal" data-row="0">—</span> en canales del medio y <span data-draw="k_medpers" data-source="conv" data-field="medios_solo_personal" data-row="0">—</span> solo en cuentas personales de periodistas</span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_asist" data-source="conv" data-field="asistieron" data-row="0">—</span><small> / <span data-draw="k_invit" data-source="conv" data-field="periodistas_invitados" data-row="0">—</span></small></span><span class="l">Asistencia de periodistas invitados</span><span class="d"><span class="f6-ver ok">Verificado</span> Todos los invitados asistieron (confirmado por ALTA)</span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_pos" data-source="kpis" data-field="pct_positivo" data-row="0">—</span><small>%</small></span><span class="l">Tono positivo del clipping</span><span class="d">Clasificación de la grilla sobre <span data-draw="k_res" data-source="kpis" data-field="registros_resultado" data-row="0">—</span> registros de medios y cuentas. No es la opinión del público.</span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_sneg" data-source="soc_resumen" data-field="negativos">—</span><small> / <span data-draw="k_sn" data-source="soc_resumen" data-field="comentarios">—</span></small></span><span class="l">Comentarios negativos del público</span><span class="d">En posts del lanzamiento, sobre todo por precio y posventa. Muestra pequeña, revisada a mano.</span></div>
+    </div>
+
+    <div class="f6-answers" id="lectura">
+      <article class="f6-ans">
+        <p class="q"><b>1</b>¿Cómo resultó el lanzamiento?</p>
+        <p>Convocatoria completa: asistieron los <b data-draw="a_asist" data-source="conv" data-field="asistieron" data-row="0">—</b> periodistas invitados y <b data-draw="a_perpub" data-source="conv" data-field="periodistas_publicaron" data-row="0">—</b> publicaron el mismo día. El reconocimiento a Fito Rayo y el legado del 600 le dieron a la prensa una historia propia.</p>
+      </article>
+      <article class="f6-ans">
+        <p class="q"><b>2</b>¿Qué conseguimos en prensa?</p>
+        <p><b data-draw="a_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</b> publicaciones únicas en <b data-draw="a_cuentas" data-source="kpis" data-field="cuentas" data-row="0">—</b> medios y cuentas, <b data-draw="a_web" data-source="kpis" data-field="notas_web" data-row="0">—</b> de ellas notas web. La cobertura es alta en volumen, pero se concentra en historias de Instagram que duran 24 horas.</p>
+      </article>
+      <article class="f6-ans">
+        <p class="q"><b>3</b>¿Qué conversación generamos?</p>
+        <p>En los posts del lanzamiento, el público dejó <b data-draw="a_sn" data-source="soc_resumen" data-field="comentarios">—</b> comentarios: <b data-draw="a_sneg" data-source="soc_resumen" data-field="negativos">—</b> negativos y <b data-draw="a_spos" data-source="soc_resumen" data-field="positivos">—</b> positivos. Pesan el precio y la posventa más que el diseño; los elogios van al diseño y al legado.</p>
+      </article>
+      <article class="f6-ans">
+        <p class="q"><b>4</b>¿Cuáles son los principales riesgos?</p>
+        <ol data-draw="a_riesgos" data-source="riesgos"></ol>
+      </article>
+      <article class="f6-ans">
+        <p class="q"><b>5</b>¿Qué debemos hacer ahora?</p>
+        <ol data-draw="a_acciones" data-source="plan"></ol>
+      </article>
+    </div>
+
+    <div class="f6-sec" id="insights-principales">
+      <header>
+        <h3>Cinco insights estratégicos</h3>
+        <p class="f6-sub">Cada insight separa la evidencia (dato verificable) de la interpretación (lectura de ALTA) y termina en una acción.</p>
+      </header>
+      <div class="f6-insights" data-draw="ins_top" data-source="insights"></div>
+    </div>
+
+    <div class="f6-card" id="riesgos">
+      <header><h3>Mapa de riesgos</h3><p class="f6-note">Ordenados por nivel. Los riesgos con borde punteado dependen de un dato por validar.</p></header>
+      <div class="f6-risks" data-draw="risklist" data-source="riesgos"></div>
+    </div>
+  </section>
+
+  <!-- B. MEDIA INTELLIGENCE -->
+  <section class="f6-sec" id="prensa" data-panel="prensa" hidden>
+    <header>
+      <p class="f6-kicker">Media Intelligence</p>
+      <h2>Qué se publicó, dónde y en qué formato</h2>
+      <p class="f6-sub">Registros de la campaña "LANZAMIENTO FIAT 600" en la grilla de clipping. Por defecto se muestran solo los resultados del evento (desde el 10/11). Las piezas anteriores, como la entrevista de Biobío del 6/11, se ven como "Previas" y no se suman a los resultados.</p>
+    </header>
+    <div class="f6-filters" id="filtros-prensa">
+      <label for="f-fase">Fase
+        <select class="dash-select" id="f-fase" aria-label="Fase">
+          <option value="evento">Resultados del evento (desde 10/11)</option>
+          <option value="Día del lanzamiento">Día del lanzamiento (10/11)</option>
+          <option value="Post-lanzamiento">Posteriores (desde 11/11)</option>
+          <option value="Pre-evento">Previas (antes del 10/11)</option>
+          <option value="all">Todas</option>
+        </select>
+      </label>
+      <label for="f-canal">Canal
+        <select class="dash-select" id="f-canal" aria-label="Canal">
+          <option value="">Todos</option>
+          <option value="Medio">Canal del medio</option>
+          <option value="Cuenta personal">Cuenta personal de periodista</option>
+          <option value="Creador">Creador / invitado especial</option>
+        </select>
+      </label>
+      <label for="f-formato">Formato
+        <select class="dash-select" id="f-formato" data-draw="sel_formato" data-source="lanz" aria-label="Formato"></select>
+      </label>
+      <label for="f-tier">Tier
+        <select class="dash-select" id="f-tier" data-draw="sel_tier" data-source="lanz" aria-label="Tier"></select>
+      </label>
+      <label for="f-medio">Medio o cuenta
+        <select class="dash-select" id="f-medio" data-draw="sel_medio" data-source="lanz" aria-label="Medio o cuenta"></select>
+      </label>
+      <button class="reset" type="button" id="f-reset-prensa">Limpiar filtros</button>
+    </div>
+    <div class="f6-kpis" id="kpis-prensa">
+      <div class="f6-kpi"><span class="n" data-draw="m_unicas" data-source="lanz">—</span><span class="l">Publicaciones únicas</span><span class="d">Una pieza colaborativa cuenta una vez</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="m_reg" data-source="lanz">—</span><span class="l">Registros por cuenta</span><span class="d">Cada cuenta que publicó la pieza</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="m_cuentas" data-source="lanz">—</span><span class="l">Medios y cuentas</span><span class="d">Con al menos una publicación</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="m_perm" data-source="lanz">—</span><span class="l">Piezas permanentes</span><span class="d">Notas web, posts, reels y Facebook</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="m_pos" data-source="lanz">—</span><span class="l">Tono positivo del clipping</span><span class="d">Criterio de la grilla</span></div>
+    </div>
+    <div class="f6-grid2">
+      <div class="f6-card" id="por-medio">
+        <header><h3>Registros por medio o cuenta</h3><div class="f6-legend"><span><i style="background:var(--f6-red)"></i>Canal del medio</span><span><i style="background:#e8838f"></i>Cuenta personal de periodista</span><span><i style="background:var(--cds-chart-muted)"></i>Creador / invitado especial</span></div></header>
+        <div class="f6-chart" data-draw="chart_medios" data-source="lanz"></div>
+        <p class="f6-note">Haz clic en una barra para filtrar la página por esa cuenta.</p>
+      </div>
+      <div class="f6-sec" style="gap:var(--cds-gap-lg)">
+        <div class="f6-card" id="por-canal">
+          <h3>Medios vs. cuentas personales de periodistas</h3>
+          <div class="f6-chart" data-draw="chart_canal" data-source="lanz" style="min-height:100px"></div>
+          <p class="f6-note">"Cuenta personal" son publicaciones de periodistas en sus propias cuentas (por ejemplo, Paola Leyton o Leo Pacheco), aunque trabajen en un medio invitado.</p>
+        </div>
+        <div class="f6-card" id="por-formato">
+          <h3>Formato: permanente vs. efímero</h3>
+          <div class="f6-chart" data-draw="chart_formato" data-source="lanz" style="min-height:120px"></div>
+        </div>
+      </div>
+      <div class="f6-card" id="por-fecha">
+        <header><h3>Evolución diaria</h3><div class="f6-legend"><span><i style="background:var(--cds-chart-muted)"></i>Previa</span><span><i style="background:var(--f6-red)"></i>Día del lanzamiento</span><span><i style="background:#e8838f"></i>Posterior</span></div></header>
+        <div class="f6-chart" data-draw="chart_fecha" data-source="lanz"></div>
+        <p class="f6-note">Muestra todas las fases, para ver el antes y el después del evento. Respeta los filtros de canal, formato, tier y cuenta.</p>
+      </div>
+      <div class="f6-card" id="tier-tono">
+        <h3>Tier y tono del clipping</h3>
+        <div class="f6-chart" data-draw="chart_tier" data-source="lanz" style="min-height:90px"></div>
+        <div class="f6-chart" data-draw="chart_rep" data-source="lanz" style="min-height:70px"></div>
+        <p class="f6-note">El tono lo asigna la grilla a cada publicación de medios y cuentas. El sentimiento del público está en Social Listening y se mide aparte.</p>
+      </div>
+    </div>
+    <div class="f6-card" id="publicaciones">
+      <header><h3>Detalle de publicaciones</h3><p class="f6-note">Cada fila es un registro de la grilla. "Repetida" marca un registro con el mismo enlace y la misma cuenta que otro: no se suma. "Colaborativa" marca una pieza que también figura en otra cuenta: suma una vez en publicaciones únicas.</p></header>
+      <div class="f6-tablewrap">
+        <table data-source="lanz" data-row-key="fila" aria-label="Publicaciones del lanzamiento">
+          <thead><tr><th data-field="fecha">Fecha</th><th data-field="fase">Fase</th><th data-field="medio">Medio / cuenta</th><th data-field="canal">Canal</th><th data-field="titulo">Titular o descripción</th><th data-field="formato">Formato</th><th data-field="tier">Tier</th><th data-field="reputacion">Tono</th><th data-field="unica">Conteo</th><th data-field="link">Fuente</th></tr></thead>
+          <tbody data-draw="pubtable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. SOCIAL LISTENING -->
+  <section class="f6-sec" id="conversacion" data-panel="conversacion" hidden>
+    <header>
+      <p class="f6-kicker">Social Listening</p>
+      <h2>Qué dice el público</h2>
+      <p class="f6-sub">Comentarios públicos de usuarios en publicaciones de medios, creadores y @fiatcl en Instagram y Facebook, leídos uno a uno y clasificados a mano. Se excluyen los comentarios de medios, creadores, Fiat, Stellantis y la agencia. Las historias no tienen comentarios públicos.</p>
+    </header>
+    <div class="f6-filters" id="filtros-social">
+      <label for="f-sfase">Publicaciones
+        <select class="dash-select" id="f-sfase" aria-label="Publicaciones">
+          <option value="Lanzamiento">Del lanzamiento (desde 10/11)</option>
+          <option value="Pre-evento">Previas al evento</option>
+          <option value="Todas">Todas</option>
+        </select>
+      </label>
+      <label for="f-splat">Plataforma
+        <select class="dash-select" id="f-splat" aria-label="Plataforma">
+          <option value="">Todas</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Facebook">Facebook</option>
+        </select>
+      </label>
+      <label for="f-ssent">Sentimiento
+        <select class="dash-select" id="f-ssent" aria-label="Sentimiento">
+          <option value="">Todos</option>
+          <option value="Negativo">Negativo</option>
+          <option value="Neutro">Neutro</option>
+          <option value="Positivo">Positivo</option>
+        </select>
+      </label>
+      <label for="f-stema">Tema
+        <select class="dash-select" id="f-stema" data-draw="sel_stema" data-source="comentarios" aria-label="Tema"></select>
+      </label>
+      <label for="f-spub">Publicación
+        <select class="dash-select" id="f-spub" data-draw="sel_spub" data-source="comentarios" aria-label="Publicación"></select>
+      </label>
+      <button class="reset" type="button" id="f-reset-social">Limpiar filtros</button>
+    </div>
+    <div class="f6-kpis" id="kpis-conversacion">
+      <div class="f6-kpi"><span class="n" data-draw="s_n" data-source="comentarios">—</span><span class="l">Comentarios de usuarios</span><span class="d">En la selección</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="s_pub" data-source="comentarios">—</span><span class="l">Publicaciones con comentarios</span><span class="d">De 13 revisadas el 10/11 a las 22:30</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="s_neg" data-source="comentarios">—</span><span class="l">Negativos</span><span class="d">Porcentaje sobre la selección</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="s_pos" data-source="comentarios">—</span><span class="l">Positivos</span><span class="d">Porcentaje sobre la selección</span></div>
+    </div>
+    <div class="f6-card" id="dos-termometros">
+      <header><h3>Dos termómetros distintos</h3><p class="f6-note">El tono del clipping mide cómo hablaron los medios y cuentas invitadas; el sentimiento del público mide lo que comentan los usuarios. No se suman ni se comparan como si fueran lo mismo.</p></header>
+      <div class="f6-chart" data-draw="chart_termometros" data-source="soc_resumen" style="min-height:110px"></div>
+    </div>
+    <div class="f6-grid2">
+      <div class="f6-card" id="sentimiento-pub">
+        <header><h3>Sentimiento por publicación</h3><div class="f6-legend"><span><i style="background:var(--color-bad)"></i>Negativo</span><span><i style="background:var(--cds-chart-muted)"></i>Neutro</span><span><i style="background:var(--color-ok)"></i>Positivo</span></div></header>
+        <div class="f6-chart" data-draw="soc_stack" data-source="comentarios"></div>
+        <p class="f6-note">Haz clic en una publicación para filtrar los comentarios.</p>
+      </div>
+      <div class="f6-card" id="temas">
+        <header><h3>Temas y su tono</h3><div class="f6-legend"><span><i style="background:var(--color-bad)"></i>Negativo</span><span><i style="background:var(--cds-chart-muted)"></i>Neutro</span><span><i style="background:var(--color-ok)"></i>Positivo</span></div></header>
+        <div class="f6-chart" data-draw="soc_temas" data-source="comentarios"></div>
+        <p class="f6-note">Haz clic en un tema para filtrar.</p>
+      </div>
+      <div class="f6-card" id="nube">
+        <h3>Palabras más usadas</h3>
+        <div class="f6-cloud" data-draw="soc_nube" data-source="comentarios"></div>
+        <p class="f6-note">En rojo, palabras que aparecen sobre todo en comentarios negativos.</p>
+      </div>
+      <div class="f6-card" id="comentarios-representativos">
+        <h3>Comentarios</h3>
+        <ul class="f6-quotes" data-draw="soc_lista" data-source="comentarios"></ul>
+      </div>
+    </div>
+    <p class="f6-note">Muestra pequeña y concentrada: indica de qué se habla, no representa a toda la audiencia. Los usuarios se citan sin nombre.</p>
+  </section>
+
+  <!-- D. MESSAGE TRACKING -->
+  <section class="f6-sec" id="mensajes" data-panel="mensajes" hidden>
+    <header>
+      <p class="f6-kicker">Message Tracking</p>
+      <h2>Mensajes buscados y mensajes instalados</h2>
+      <p class="f6-sub">Presencia de cada mensaje en titulares y descripciones registrados en la grilla desde el 10/11, detectada por palabras clave (no se leyó el cuerpo de las notas). Presencia alta con 10 registros o más, moderada de 3 a 9, baja de 1 a 2.</p>
+    </header>
+    <div class="f6-filters" id="filtros-mensajes">
+      <label for="f-mcanal">Canal
+        <select class="dash-select" id="f-mcanal" aria-label="Canal">
+          <option value="">Todos</option>
+          <option value="Medio">Canal del medio</option>
+          <option value="Cuenta personal">Cuenta personal de periodista</option>
+          <option value="Creador">Creador / invitado especial</option>
+        </select>
+      </label>
+      <label for="f-mtipo">Tipo de mensaje
+        <select class="dash-select" id="f-mtipo" aria-label="Tipo de mensaje">
+          <option value="">Todos</option>
+          <option value="Estratégico">Estratégico</option>
+          <option value="Táctico">Táctico</option>
+        </select>
+      </label>
+    </div>
+    <div class="f6-grid2">
+      <div class="f6-card" id="presencia">
+        <header><h3>Presencia por mensaje</h3><div class="f6-legend"><span><i style="background:var(--color-ok)"></i>Alta</span><span><i style="background:var(--color-warn)"></i>Moderada</span><span><i style="background:var(--cds-chart-muted)"></i>Baja</span><span><i style="background:var(--color-bad)"></i>Sin presencia</span></div></header>
+        <div class="f6-chart" data-draw="chart_msgs" data-source="msg_matriz"></div>
+      </div>
+      <div class="f6-card" id="oportunidades-mensajes">
+        <h3>Mensajes que no se instalaron</h3>
+        <ul class="f6-list">
+          <li><b>Dolce Vita y "Welcome to Italy".</b> No aparecen en la cobertura. Conviene definir con Fiat un solo concepto paraguas y llevarlo a creadoras lifestyle.</li>
+          <li><b>Experiencia de manejo.</b> Ningún medio chileno lo ha manejado todavía: los test drives abren el segundo ciclo de notas.</li>
+          <li><b>Tecnología microhíbrida, bien explicada.</b> Los medios corrigen el nombre "Hybrid". Una pieza clara sobre qué hace el sistema de 48 V protege la credibilidad.</li>
+          <li><b>Complementariedad con Pulse y Fastback.</b> No apareció. Sirve para la conversación sobre la nueva etapa de la marca.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="f6-card" id="matriz">
+      <header><h3>Matriz mensaje × cuenta</h3><p class="f6-note">Cada celda es el número de registros de esa cuenta que contienen el mensaje. Más intenso, más presencia.</p></header>
+      <div class="f6-tablewrap">
+        <table class="f6-heat" data-source="msg_matriz" aria-label="Matriz de mensajes por cuenta">
+          <thead data-draw="heat_head"></thead>
+          <tbody data-draw="heat_body"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="f6-card" id="ejemplos">
+      <h3>Ejemplos por mensaje</h3>
+      <div class="f6-tablewrap">
+        <table data-source="mensajes" data-row-key="mensaje" aria-label="Ejemplos por mensaje">
+          <thead><tr><th data-field="mensaje">Mensaje</th><th data-field="tipo">Tipo</th><th class="num" data-field="registros">Registros</th><th class="num" data-field="cuentas">Cuentas</th><th data-field="nivel">Presencia</th><th data-field="ejemplo">Ejemplo</th></tr></thead>
+          <tbody data-draw="msgtable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- E. CONTENIDOS -->
+  <section class="f6-sec" id="contenidos" data-panel="contenidos" hidden>
+    <header>
+      <p class="f6-kicker">Contenidos</p>
+      <h2>Piezas digitales del evento</h2>
+      <p class="f6-sub">Piezas de redes registradas desde el 10/11. Las interacciones aparecerán cuando Analytics complete la grilla. Todo lo registrado es Earned Media u orgánico: no hay contenido pagado.</p>
+    </header>
+    <div class="f6-chips" role="group" aria-label="Filtrar por formato">
+      <button class="f6-chip" data-fmt="" aria-pressed="true">Todas</button>
+      <button class="f6-chip" data-fmt="Historia IG" aria-pressed="false">Historias</button>
+      <button class="f6-chip" data-fmt="Post IG" aria-pressed="false">Posts</button>
+      <button class="f6-chip" data-fmt="Reel" aria-pressed="false">Reels</button>
+      <button class="f6-chip" data-fmt="Facebook" aria-pressed="false">Facebook</button>
+    </div>
+    <div class="f6-gallery" id="galeria" data-draw="gallery" data-source="lanz"></div>
+    <div class="f6-card" id="reutilizacion">
+      <h3>Contenidos con potencial de reutilización</h3>
+      <ul class="f6-list">
+        <li><b>El post colaborativo de Coral Menta y Tuerca Aventura</b> ("¡El Fitito creció…!") resume el concepto clásico y nuevo en una frase. Se puede amplificar desde @fiatcl con permiso.</li>
+        <li><b>Las historias de Fito Rayo con el 600 de 1969 junto al Hybrid</b> son el material visual más compartido del día. Sirven para un reel de marca.</li>
+        <li><b>El reel de Altorque manejando el 600 en Italia</b> (previo, 5/11) es el único contenido de manejo. Se puede retomar cuando haya test drives en Chile.</li>
+        <li><b>La historia de Estilo Motor con Ricardo Passos</b> es la única vocería del día en redes. Sirve de base para entrevistas.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- F. MEDIA RELATIONSHIP TRACKER -->
+  <section class="f6-sec" id="medios" data-panel="medios" hidden>
+    <header>
+      <p class="f6-kicker">Media Relationship Tracker</p>
+      <h2>Medios y periodistas</h2>
+      <p class="f6-sub">Cruce de la lista de invitados y la grilla de clipping. Un contacto pasa solo a "Publicado" cuando aparece una publicación suya desde el 10/11; las entrevistas previas no cuentan.</p>
+    </header>
+    <div class="f6-grid2">
+      <div class="f6-card" id="embudo">
+        <h3>De la invitación a la publicación</h3>
+        <div class="f6-chart" data-draw="chart_embudo" data-source="conv" style="min-height:150px"></div>
+      </div>
+      <div class="f6-card" id="conciliacion">
+        <header><h3>Medios con cobertura vs. contactos publicados</h3><p class="f6-note">Los medios y los contactos se cuentan distinto: un medio puede tener dos periodistas, y Fito Rayo no es un medio.</p></header>
+        <div class="f6-recon">
+          <div><b class="n"><span data-draw="r_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</span> / <span data-draw="r_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</span></b><p>Medios invitados con cobertura: <span data-draw="r_medcanal" data-source="conv" data-field="medios_canal" data-row="0">—</span> en sus propios canales y <span data-draw="r_medpers" data-source="conv" data-field="medios_solo_personal" data-row="0">—</span> solo a través de la cuenta personal de su periodista (<span data-draw="r_lista_pers" data-source="conv" data-field="lista_solo_personal" data-row="0">—</span>). Sin cobertura: <span data-draw="r_lista_sin" data-source="conv" data-field="lista_sin" data-row="0">—</span>.</p></div>
+          <div><b class="n" data-draw="r_perpub" data-source="conv" data-field="periodistas_publicaron" data-row="0">—</b><p>Periodistas invitados que publicaron, de <span data-draw="r_perinv" data-source="conv" data-field="periodistas_invitados" data-row="0">—</span> que asistieron. Estilo Motor tiene dos (Paola Leyton y Ángeles Gana).</p></div>
+          <div><b class="n" data-draw="r_contpub" data-source="conv" data-field="publicados" data-row="0">—</b><p>Contactos en estado "Publicado" en el tracker: los periodistas anteriores más <span data-draw="r_esp" data-source="conv" data-field="especiales_publicados" data-row="0">—</span> invitado especial (Fito Rayo). La entrevista de Biobío del 6/11 es previa y no se cuenta.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="f6-kpis" id="kpis-seguimiento">
+      <div class="f6-kpi"><span class="n" data-draw="k_pub" data-source="conv" data-field="publicados" data-row="0">—</span><span class="l"><span class="f6-pill ok">PUBLICADO</span></span><span class="d">Con publicación desde el 10/11</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="k_seg" data-source="conv" data-field="en_seguimiento" data-row="0">—</span><span class="l"><span class="f6-pill warn">EN SEGUIMIENTO</span></span><span class="d">Conversación abierta</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="k_pend" data-source="conv" data-field="pendientes" data-row="0">—</span><span class="l"><span class="f6-pill mute">PENDIENTE</span></span><span class="d">Sin publicación ni conversación activa</span></div>
+    </div>
+    <div class="f6-filters" id="filtros-medios">
+      <label for="f-ttipo">Relación
+        <select class="dash-select" id="f-ttipo" aria-label="Relación">
+          <option value="">Todas</option>
+          <option value="Invitado">Invitados</option>
+          <option value="Invitado especial">Invitado especial</option>
+          <option value="Prensa previa">Prensa previa</option>
+        </select>
+      </label>
+      <label for="f-test">Estado
+        <select class="dash-select" id="f-test" aria-label="Estado">
+          <option value="">Todos</option>
+          <option value="PUBLICADO">Publicado</option>
+          <option value="EN SEGUIMIENTO">En seguimiento</option>
+          <option value="PENDIENTE">Pendiente</option>
+        </select>
+      </label>
+      <label for="f-tver">Verificación
+        <select class="dash-select" id="f-tver" aria-label="Verificación">
+          <option value="">Todas</option>
+          <option value="Verificado">Verificado</option>
+          <option value="Por validar">Por validar</option>
+        </select>
+      </label>
+    </div>
+    <div class="f6-tablewrap" id="tracker">
+      <table data-source="seguimiento" data-row-key="id" aria-label="Seguimiento de medios">
+        <thead><tr><th data-field="periodista">Periodista</th><th data-field="medio">Medio</th><th data-field="tipo">Relación</th><th data-field="asistio">Asistió</th><th data-field="estado">Estado</th><th data-field="cobertura">Cobertura</th><th class="num" data-field="publicaciones">Registros</th><th data-field="verificacion">Dato</th></tr></thead>
+        <tbody data-draw="tracker"></tbody>
+      </table>
+    </div>
+    <div class="f6-grid2">
+      <div class="f6-card" id="correo">
+        <header><h3>Distribución del comunicado</h3><p class="f6-note">Envío del 10/11 a la base de prensa, con copia oculta.</p></header>
+        <div data-draw="correo_panel" data-source="envio"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- G. NEXT STEPS -->
+  <section class="f6-sec" id="proximos" data-panel="proximos" hidden>
+    <header>
+      <p class="f6-kicker">Next Steps</p>
+      <h2>Próximos 15 días</h2>
+      <p class="f6-sub">Calendario del 11 al 25 de noviembre. La prioridad combina impacto esperado, facilidad y relevancia para los objetivos de Fiat.</p>
+    </header>
+    <div class="f6-filters" id="filtros-plan">
+      <label for="f-pprio">Prioridad
+        <select class="dash-select" id="f-pprio" aria-label="Prioridad">
+          <option value="">Todas</option>
+          <option value="Alta">Alta</option>
+          <option value="Media">Media</option>
+        </select>
+      </label>
+      <label for="f-ptipo">Tipo
+        <select class="dash-select" id="f-ptipo" data-draw="sel_ptipo" data-source="plan" aria-label="Tipo"></select>
+      </label>
+      <label for="f-presp">Responsable
+        <select class="dash-select" id="f-presp" data-draw="sel_presp" data-source="plan" aria-label="Responsable"></select>
+      </label>
+    </div>
+    <div class="f6-card" id="calendario-visual">
+      <header><h3>Calendario</h3><div class="f6-legend"><span><i style="background:var(--f6-red)"></i>Prioridad alta</span><span><i style="background:var(--color-warn)"></i>Prioridad media</span></div></header>
+      <div class="f6-cal" data-draw="calendar" data-source="plan"></div>
+    </div>
+    <div class="f6-tablewrap" id="calendario">
+      <table data-source="plan" data-row-key="accion" aria-label="Plan de acciones">
+        <thead><tr><th data-field="fecha">Fecha</th><th data-field="accion">Acción</th><th data-field="tipo">Tipo</th><th data-field="prioridad">Prioridad</th><th data-field="impacto">Impacto</th><th data-field="facilidad">Facilidad</th><th data-field="responsable">Responsable</th></tr></thead>
+        <tbody data-draw="plantable"></tbody>
+      </table>
+    </div>
+    <div class="f6-sec" id="mas-hallazgos">
+      <h3>Otros hallazgos y recomendaciones</h3>
+      <div class="f6-insights" data-draw="ins_more" data-source="insights"></div>
+    </div>
+    <div class="f6-grid2">
+      <div class="f6-card" id="pendientes">
+        <header><h3>Datos por validar y limitaciones</h3><p class="f6-note">Lo que falta confirmar antes de usar estos datos como finales.</p></header>
+        <div class="f6-tablewrap">
+          <table data-source="pendientes" data-row-key="dato" aria-label="Datos pendientes">
+            <thead><tr><th data-field="dato">Dato</th><th data-field="estado">Estado</th><th data-field="impacto">Qué implica</th><th data-field="que_falta">Qué falta</th></tr></thead>
+            <tbody data-draw="gaptable"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="f6-card" id="historial">
+        <h3>Historial de actualizaciones</h3>
+        <ul class="f6-list" data-draw="historial" data-source="historial"></ul>
+        <p class="f6-note">Las publicaciones se cuentan una vez por enlace, aunque se registren de nuevo. Cada actualización de datos queda registrada aquí.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ---------- Fuentes ----------
+dash.loader('grilla', {
+  description: 'Convierte las filas de la hoja "Grilla de Clipping" (desde la fila 4500) en registros con nombre de columna y número de fila.',
+  fn: ({ answer }) => {
+    const v = (answer && (answer.values || (answer.content && answer.content.values))) || [];
+    const cols = ['marca', 'fecha', 'titulo', 'medio', 'tipo_medio', 'link', 'usuario', 'seguidores', 'duracion', 'campana', 'subtema', 'gestion', 'valor_pagado', 'voceria', 'exclusividad', 'branding', 'imagen_marca', 'mencion_titulo', 'tier', 'reputacion'];
+    const rows = v.map((r, i) => { const o = { fila: String(4500 + i) }; cols.forEach((c, j) => { o[c] = r[j] == null ? '' : String(r[j]); }); return o; })
+      .filter((o) => o.marca || o.titulo);
+    return { columns: ['fila', ...cols], rows };
+  }
+});
+
+// ---------- Cálculos ----------
+dash.calc('lanz', {
+  title: 'Publicaciones del lanzamiento',
+  description: 'Registros de la campaña LANZAMIENTO FIAT 600 con fase (previa, día del lanzamiento o posterior), formato, canal (medio, cuenta personal de periodista o creador, según el archivo de cuentas) y control de duplicados por enlace.',
+  inputs: ['grilla', 'cuentas'],
+  fn: (grilla, cuentas) => {
+    const iso = (f) => { const p = String(f || '').split('/'); return p.length === 3 ? `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}` : ''; };
+    const norm = (l) => String(l || '').trim().replace(/[?#].*$/, '').replace(/\/+$/, '').toLowerCase();
+    const cmap = new Map(cuentas.map((c) => [String(c.cuenta).trim().toLowerCase(), c]));
+    const lanzamiento = '2026-11-10';
+    const vistos = new Set(), vistosCuenta = new Set();
+    return grilla
+      .filter((r) => String(r.campana).trim().toUpperCase() === 'LANZAMIENTO FIAT 600')
+      .map((r) => {
+        const fecha_iso = iso(r.fecha);
+        const titulo = String(r.titulo || '');
+        const link = String(r.link || '');
+        const medio = String(r.medio || '').trim();
+        let formato = 'Post IG';
+        if (/\(historia/i.test(titulo)) formato = 'Historia IG';
+        else if (r.tipo_medio === 'Web') formato = 'Nota web';
+        else if (r.tipo_medio === 'Facebook') formato = 'Facebook';
+        else if (/\/reel\//.test(link)) formato = 'Reel';
+        const fase = fecha_iso < lanzamiento ? 'Pre-evento' : (fecha_iso === lanzamiento ? 'Día del lanzamiento' : 'Post-lanzamiento');
+        const c = cmap.get(medio.toLowerCase());
+        const clave = norm(link) || ('sin-enlace|' + medio + '|' + titulo + '|' + fecha_iso);
+        const claveCuenta = medio.toLowerCase() + '|' + clave;
+        const repetida = vistosCuenta.has(claveCuenta) ? 'Sí' : 'No';
+        const unica = vistos.has(clave) ? 'No' : 'Sí';
+        vistos.add(clave); vistosCuenta.add(claveCuenta);
+        return { fila: String(r.fila), fecha: r.fecha, fecha_iso, fase, evento: fase === 'Pre-evento' ? 'No' : 'Sí', medio, canal: c ? c.canal : 'Sin clasificar', medio_padre: c ? c.medio_padre : medio, canal_verificacion: c ? c.verificacion : 'Por validar', titulo, formato, permanente: formato === 'Historia IG' ? 'No' : 'Sí', tipo_medio: r.tipo_medio, gestion: r.gestion, tier: r.tier || 'Sin tier', reputacion: r.reputacion || 'Sin dato', voceria: r.voceria, link, clave, unica, repetida };
+      });
+  }
+});
+
+dash.calc('kpis', {
+  title: 'Indicadores del lanzamiento',
+  description: 'Totales de resultados del evento (desde el 10/11), sin registros repetidos; las publicaciones únicas cuentan cada enlace una vez.',
+  inputs: ['lanz'],
+  fn: (pubs) => {
+    const res = pubs.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+    const claves = new Set(res.map((p) => p.clave));
+    const permanentes = new Set(res.filter((p) => p.permanente === 'Sí').map((p) => p.clave));
+    const pos = res.filter((p) => p.reputacion === 'Positivo').length;
+    const pre = pubs.filter((p) => p.evento === 'No' && p.repetida === 'No');
+    return [{
+      registros_resultado: res.length,
+      publicaciones_unicas: claves.size,
+      cuentas: new Set(res.map((p) => p.medio)).size,
+      notas_web: new Set(res.filter((p) => p.formato === 'Nota web').map((p) => p.clave)).size,
+      historias: new Set(res.filter((p) => p.formato === 'Historia IG').map((p) => p.clave)).size,
+      permanentes: permanentes.size,
+      pct_positivo: res.length ? Math.round(pos / res.length * 100) : 0,
+      dia: new Set(res.filter((p) => p.fase === 'Día del lanzamiento').map((p) => p.clave)).size,
+      posteriores: new Set(res.filter((p) => p.fase === 'Post-lanzamiento').map((p) => p.clave)).size,
+      previas: new Set(pre.map((p) => p.clave)).size
+    }];
+  }
+});
+
+dash.calc('seguimiento', {
+  title: 'Seguimiento de medios (estado calculado)',
+  description: 'Contactos del archivo de seguimiento. El estado pasa a PUBLICADO si la cuenta tiene registros en la grilla desde el 10/11; la cobertura dice si fue en el canal del medio o solo en una cuenta personal.',
+  inputs: ['seguimiento_base', 'lanz'],
+  fn: (contactos, pubs) => {
+    const res = pubs.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+    return contactos.map((c) => {
+      let hits = [];
+      if (c.match && c.match !== '^$') { const re = new RegExp(c.match, 'i'); hits = res.filter((p) => re.test(p.medio)); }
+      const nMedio = hits.filter((p) => p.canal === 'Medio').length;
+      const nPers = hits.filter((p) => p.canal === 'Cuenta personal').length;
+      const nCre = hits.filter((p) => p.canal === 'Creador').length;
+      const estado = hits.length ? 'PUBLICADO' : c.estado_base;
+      const cobertura = !hits.length ? '—' : nCre ? 'Cuenta propia (creador)' : nMedio && nPers ? 'Medio y cuenta personal' : nMedio ? 'Canal del medio' : 'Solo cuenta personal';
+      return { id: c.id, periodista: c.periodista, medio: c.medio, medio_padre: c.medio_padre || '', tipo: c.tipo, asistio: c.asistio || '—', estado, cobertura, publicaciones: hits.length, en_medio: nMedio, en_personal: nPers, respuesta: c.respuesta, ultimo_contacto: c.ultimo_contacto, oportunidad: c.oportunidad, proxima_accion: c.proxima_accion, fuente: c.fuente, verificacion: c.verificacion || 'Verificado' };
+    });
+  }
+});
+
+dash.calc('conv', {
+  title: 'Convocatoria, cobertura y estados',
+  description: 'Periodistas invitados y asistentes, medios invitados con cobertura (en sus canales o solo en cuentas personales de sus periodistas) y contactos por estado.',
+  inputs: ['seguimiento', 'lanz'],
+  fn: (contactos, pubs) => {
+    const res = pubs.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+    const inv = contactos.filter((c) => c.tipo === 'Invitado');
+    const medios = Array.from(new Set(inv.map((c) => c.medio_padre || c.medio)));
+    const canal = medios.filter((m) => res.some((p) => p.canal === 'Medio' && p.medio_padre === m));
+    const pers = medios.filter((m) => !canal.includes(m) && (res.some((p) => p.canal === 'Cuenta personal' && p.medio_padre === m) || inv.some((c) => (c.medio_padre || c.medio) === m && c.estado === 'PUBLICADO')));
+    const sin = medios.filter((m) => !canal.includes(m) && !pers.includes(m));
+    return [{
+      periodistas_invitados: inv.length,
+      asistieron: inv.filter((c) => c.asistio === 'Sí').length,
+      periodistas_publicaron: inv.filter((c) => c.estado === 'PUBLICADO').length,
+      especiales_publicados: contactos.filter((c) => c.tipo === 'Invitado especial' && c.estado === 'PUBLICADO').length,
+      medios_invitados: medios.length,
+      medios_cobertura: canal.length + pers.length,
+      medios_canal: canal.length,
+      medios_solo_personal: pers.length,
+      lista_solo_personal: pers.join(', ') || 'ninguno',
+      lista_sin: sin.join(' y ') || 'ninguno',
+      publicados: contactos.filter((c) => c.estado === 'PUBLICADO').length,
+      en_seguimiento: contactos.filter((c) => c.estado === 'EN SEGUIMIENTO').length,
+      pendientes: contactos.filter((c) => c.estado === 'PENDIENTE').length
+    }];
+  }
+});
+
+dash.calc('mensajes', {
+  title: 'Presencia de mensajes',
+  description: 'Mensajes buscados detectados por palabras clave en titulares y descripciones desde el 10/11, sin registros repetidos.',
+  inputs: ['lanz'],
+  fn: (pubs) => {
+    const claves = [
+      ['Legado del 600 y "Fitito"', 'Estratégico', /fitito|leyenda|evoluci|pasado|1955|1969|cl[aá]sico|[ií]cono|regreso|retorno|vuelve/i],
+      ['Reconocimiento a Fito Rayo', 'Táctico', /fito ?rayo|@fitorayo/i],
+      ['Origen europeo e italiano', 'Estratégico', /europ|itali|origen|polonia|tierra natal/i],
+      ['Tecnología microhíbrida', 'Estratégico', /h[ií]brid|mhev|microh|electrific/i],
+      ['Diseño exterior e interior', 'Estratégico', /dise[ñn]o|interior|crossover|suv|neo-?retro/i],
+      ['Precio y propuesta comercial', 'Táctico', /precio|\$/i],
+      ['Experiencia de manejo', 'Estratégico', /manej|test drive|prueba/i],
+      ['Vocería de Fiat (Ricardo Passos)', 'Táctico', /passos/i],
+      ['Dolce Vita', 'Estratégico', /dolce/i],
+      ['"Welcome to Italy"', 'Estratégico', /welcome/i],
+      ['Gama: Pulse y Fastback', 'Estratégico', /pulse|fastback/i]
+    ];
+    const limpio = (p) => p.titulo.replace(/\(historia[^)]*\)/ig, '') + ' ' + (p.voceria && !/sin voc/i.test(p.voceria) ? p.voceria : '');
+    const res = pubs.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+    return claves.map(([mensaje, tipo, re]) => {
+      const hits = res.filter((p) => re.test(limpio(p)));
+      const n = hits.length;
+      const ej = hits.find((p) => p.formato !== 'Historia IG') || hits[0];
+      return { mensaje, tipo, registros: n, cuentas: new Set(hits.map((p) => p.medio)).size, nivel: n >= 10 ? 'Alta' : n >= 3 ? 'Moderada' : n >= 1 ? 'Baja' : 'Sin presencia', ejemplo: ej ? `${ej.medio}: ${ej.titulo}` : '—' };
+    });
+  }
+});
+dash.calc('msg_matriz', {
+  title: 'Mensajes por cuenta',
+  description: 'Registros desde el 10/11 que contienen cada mensaje, por cuenta y canal.',
+  inputs: ['lanz'],
+  fn: (pubs) => {
+    const claves = [
+      ['Legado del 600 y "Fitito"', 'Estratégico', /fitito|leyenda|evoluci|pasado|1955|1969|cl[aá]sico|[ií]cono|regreso|retorno|vuelve/i],
+      ['Reconocimiento a Fito Rayo', 'Táctico', /fito ?rayo|@fitorayo/i],
+      ['Origen europeo e italiano', 'Estratégico', /europ|itali|origen|polonia|tierra natal/i],
+      ['Tecnología microhíbrida', 'Estratégico', /h[ií]brid|mhev|microh|electrific/i],
+      ['Diseño exterior e interior', 'Estratégico', /dise[ñn]o|interior|crossover|suv|neo-?retro/i],
+      ['Precio y propuesta comercial', 'Táctico', /precio|\$/i],
+      ['Experiencia de manejo', 'Estratégico', /manej|test drive|prueba/i],
+      ['Vocería de Fiat (Ricardo Passos)', 'Táctico', /passos/i],
+      ['Dolce Vita', 'Estratégico', /dolce/i],
+      ['"Welcome to Italy"', 'Estratégico', /welcome/i],
+      ['Gama: Pulse y Fastback', 'Estratégico', /pulse|fastback/i]
+    ];
+    const limpio = (p) => p.titulo.replace(/\(historia[^)]*\)/ig, '') + ' ' + (p.voceria && !/sin voc/i.test(p.voceria) ? p.voceria : '');
+    const res = pubs.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+    const cuentas = Array.from(d3.group(res, (p) => p.medio), ([medio, v]) => ({ medio, canal: v[0].canal }));
+    return claves.flatMap(([mensaje, tipo, re]) => {
+      const m = d3.rollup(res.filter((p) => re.test(limpio(p))), (v) => v.length, (p) => p.medio);
+      return cuentas.map((c) => ({ mensaje, tipo, medio: c.medio, canal: c.canal, registros: m.get(c.medio) || 0 }));
+    });
+  }
+});
+
+dash.calc('envio_calc', {
+  title: 'Correos entregados',
+  description: 'Destinatarios del comunicado menos rebotes, según el último registro guardado.',
+  inputs: ['envio'],
+  fn: (envio) => envio.length ? Number(envio[0].destinatarios) - Number(envio[0].rebotes) : null
+});
+
+dash.calc('soc_resumen', {
+  title: 'Resumen de comentarios',
+  description: 'Comentarios de usuarios por grupo de publicaciones (lanzamiento, pre-evento y todas).',
+  inputs: ['comentarios'],
+  fn: (comentarios) => {
+    const us = comentarios.filter((c) => c.tipo_autor === 'Usuario');
+    return ['Lanzamiento', 'Pre-evento', 'Todas'].map((fase) => {
+      const x = fase === 'Todas' ? us : us.filter((c) => c.fase === fase);
+      return { fase, comentarios: x.length, publicaciones: new Set(x.map((c) => c.publicacion)).size, negativos: x.filter((c) => c.sentimiento === 'Negativo').length, positivos: x.filter((c) => c.sentimiento === 'Positivo').length, neutros: x.filter((c) => c.sentimiento === 'Neutro').length };
+    });
+  }
+});
+</script>
+
+<script>
+// ---------- Utilidades ----------
+window.F6CLAVES = [
+  ['Legado del 600 y "Fitito"', 'Estratégico', /fitito|leyenda|evoluci|pasado|1955|1969|cl[aá]sico|[ií]cono|regreso|retorno|vuelve/i],
+  ['Reconocimiento a Fito Rayo', 'Táctico', /fito ?rayo|@fitorayo/i],
+  ['Origen europeo e italiano', 'Estratégico', /europ|itali|origen|polonia|tierra natal/i],
+  ['Tecnología microhíbrida', 'Estratégico', /h[ií]brid|mhev|microh|electrific/i],
+  ['Diseño exterior e interior', 'Estratégico', /dise[ñn]o|interior|crossover|suv|neo-?retro/i],
+  ['Precio y propuesta comercial', 'Táctico', /precio|\$/i],
+  ['Experiencia de manejo', 'Estratégico', /manej|test drive|prueba/i],
+  ['Vocería de Fiat (Ricardo Passos)', 'Táctico', /passos/i],
+  ['Dolce Vita', 'Estratégico', /dolce/i],
+  ['"Welcome to Italy"', 'Estratégico', /welcome/i],
+  ['Gama: Pulse y Fastback', 'Estratégico', /pulse|fastback/i]
+];
+window.f6limpio = (p) => p.titulo.replace(/\(historia[^)]*\)/ig, '') + ' ' + (p.voceria && !/sin voc/i.test(p.voceria) ? p.voceria : '');
+window.f6nivel = (n) => n >= 10 ? 'Alta' : n >= 3 ? 'Moderada' : n >= 1 ? 'Baja' : 'Sin presencia';
+window.f6mensajes = (res) => F6CLAVES.map(([mensaje, tipo, re]) => {
+  const hits = res.filter((p) => re.test(f6limpio(p)));
+  const ej = hits.find((p) => p.formato !== 'Historia IG') || hits[0];
+  return { mensaje, tipo, registros: hits.length, cuentas: new Set(hits.map((p) => p.medio)).size, nivel: f6nivel(hits.length), ejemplo: ej ? `${ej.medio}: ${ej.titulo}` : '—' };
+});
+window.f6 = window.f6 || { fase: 'evento', canal: '', formato: '', tier: '', medio: '', galFmt: '', sfase: 'Lanzamiento', splat: '', ssent: '', stema: '', spub: '', mcanal: '', mtipo: '', ttipo: '', test: '', tver: '', pprio: '', ptipo: '', presp: '' };
+window.F6CANAL = { 'Medio': 'var(--f6-red)', 'Cuenta personal': '#e8838f', 'Creador': 'var(--cds-chart-muted)', 'Sin clasificar': 'var(--color-warn)' };
+window.F6SENT = { Positivo: 'var(--color-ok)', Neutro: 'var(--cds-chart-muted)', Negativo: 'var(--color-bad)' };
+window.f6fmt = (n) => (n == null || isNaN(n)) ? '—' : Number(n).toLocaleString('es-CL');
+window.f6pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+window.f6el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+window.f6ver = (v) => f6el('span', 'f6-ver ' + (v === 'Por validar' ? 'pend' : 'ok'), v === 'Por validar' ? 'Por validar' : 'Verificado');
+window.f6pill = (estado) => f6el('span', 'f6-pill ' + (estado === 'PUBLICADO' ? 'ok' : estado === 'EN SEGUIMIENTO' ? 'warn' : 'mute'), estado);
+window.f6cell = (tr, text, cls) => { const td = f6el('td', cls, text == null ? '' : text); tr.appendChild(td); return td; };
+window.f6status = (el, s) => {
+  if (s.status === 'loading') { el.replaceChildren(); el.classList.add('dash-skeleton'); return true; }
+  el.classList.remove('dash-skeleton');
+  if (s.status === 'error') { el.replaceChildren(f6el('p', 'f6-note', 'No se pudo cargar.')); return true; }
+  if (s.status !== 'ok') { el.replaceChildren(document.createTextNode('—')); return true; }
+  return false;
+};
+window.f6tipOn = (el, tip, ev, text) => { const r = el.getBoundingClientRect(); tip.textContent = text; tip.hidden = false; tip.style.left = Math.max(0, Math.min(ev.clientX - r.left + 10, r.width - tip.offsetWidth - 4)) + 'px'; tip.style.top = (ev.clientY - r.top - 34) + 'px'; };
+window.f6labels = (svg, rows, key, maxW) => {
+  const tmp = svg.append('g');
+  const w = d3.max(rows, (r) => { const t = tmp.append('text').text(r[key]); const v = t.node().getComputedTextLength(); return v; }) || 60;
+  tmp.remove();
+  return Math.min(maxW, w + 12);
+};
+window.f6trunc = function (d, full, max) { const t = d3.select(this); t.text(full); if (this.getComputedTextLength() > max) { let n = full.length; while (n > 1 && (t.text(full.slice(0, n) + '…'), this.getComputedTextLength() > max)) n--; t.append('title').text(full); } };
+// Barras horizontales; opts.segs = [{key, color, label}] para barras apiladas; opts.onClick(d)
+window.f6hbar = (el, rows, key, val, opts) => {
+  el.replaceChildren();
+  if (!rows.length) { el.appendChild(f6el('p', 'f6-note', opts.empty || 'Sin datos con estos filtros.')); return; }
+  const tip = f6el('div', 'f6-tip'); tip.hidden = true;
+  const W = Math.max(260, el.clientWidth || 300);
+  const bh = opts.bh || 20, gap = 7;
+  const svg = d3.select(el).append('svg').attr('role', 'img').attr('aria-label', opts.label);
+  const labW = f6labels(svg, rows, key, W * 0.42);
+  const total = (d) => opts.segs ? d3.sum(opts.segs, (s) => +d[s.key] || 0) : +d[val];
+  const valTxt = (d) => opts.fmtVal ? opts.fmtVal(d) : f6fmt(total(d));
+  const tmpv = svg.append('g'); const valW = (d3.max(rows, (d) => { const t = tmpv.append('text').attr('class', 'val').text(valTxt(d)); return t.node().getComputedTextLength(); }) || 20) + 12; tmpv.remove();
+  const x = d3.scaleLinear().domain([0, opts.max || d3.max(rows, total) || 1]).range([0, Math.max(40, W - labW - valW)]);
+  const H = rows.length * (bh + gap);
+  svg.attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+  const g = svg.selectAll('g.row').data(rows).join('g').attr('class', 'row').attr('transform', (d, i) => `translate(0,${i * (bh + gap)})`).style('cursor', opts.onClick ? 'pointer' : null);
+  g.append('text').attr('x', labW - 8).attr('y', bh / 2).attr('dy', '0.35em').attr('text-anchor', 'end').each(function (d) { f6trunc.call(this, d, String(d[key]), labW - 10); })
+    .style('font-weight', (d) => opts.isSel && opts.isSel(d) ? '700' : null);
+  const segs = opts.segs || [{ key: val, color: opts.color, label: opts.unit }];
+  g.each(function (d, i) {
+    let x0 = labW;
+    segs.forEach((s) => {
+      const v = +d[s.key] || 0; if (!v && opts.segs) return;
+      const w = Math.max(opts.segs ? 0 : 2, x(v));
+      d3.select(this).append('rect').attr('x', x0).attr('height', bh).attr('width', w).attr('rx', 2)
+        .style('fill', typeof s.color === 'function' ? s.color(d, i) : (s.color || dash.colors[0]))
+        .style('opacity', opts.isSel && !opts.isSel(d) && opts.anySel ? 0.35 : 1)
+        .on('pointermove', (ev) => f6tipOn(el, tip, ev, `${d[key]}: ${f6fmt(v)} ${s.label || opts.unit || ''}`))
+        .on('pointerleave', () => { tip.hidden = true; });
+      x0 += w;
+    });
+  });
+  g.append('text').attr('class', 'val').attr('x', (d) => labW + x(total(d)) + 6).attr('y', bh / 2).attr('dy', '0.35em').text(valTxt);
+  if (opts.onClick) g.on('click', (ev, d) => opts.onClick(d));
+  el.appendChild(tip);
+};
+</script>
+
+<script>
+// ---------- Números simples ----------
+const f6num = (name, src, field, row) => dash.draw(name, (el) => {
+  const s = dash.data(src);
+  if (s.status !== 'ok' || s.data == null || (Array.isArray(s.data) && !s.data.length)) { el.textContent = '—'; return; }
+  const r = Array.isArray(s.data) ? (row ? s.data.find(row) : s.data[0]) : null;
+  el.textContent = r ? (typeof r[field] === 'number' ? f6fmt(r[field]) : String(r[field] ?? '—')) : (Array.isArray(s.data) ? '—' : f6fmt(s.data));
+});
+[['h_asist','asistieron'],['h_invit','periodistas_invitados'],['h_medcob','medios_cobertura'],['h_medinv','medios_invitados'],['k_medcob','medios_cobertura'],['k_medinv','medios_invitados'],['k_medcanal','medios_canal'],['k_medpers','medios_solo_personal'],['k_asist','asistieron'],['k_invit','periodistas_invitados'],['a_asist','asistieron'],['a_perpub','periodistas_publicaron'],['r_medcob','medios_cobertura'],['r_medinv','medios_invitados'],['r_medcanal','medios_canal'],['r_medpers','medios_solo_personal'],['r_lista_pers','lista_solo_personal'],['r_lista_sin','lista_sin'],['r_perpub','periodistas_publicaron'],['r_perinv','asistieron'],['r_contpub','publicados'],['r_esp','especiales_publicados'],['k_pub','publicados'],['k_seg','en_seguimiento'],['k_pend','pendientes']].forEach(([n, f]) => f6num(n, 'conv', f));
+[['h_unicas','publicaciones_unicas'],['h_pos','pct_positivo'],['k_unicas','publicaciones_unicas'],['k_perm','permanentes'],['k_hist','historias'],['k_pos','pct_positivo'],['k_res','registros_resultado'],['a_unicas','publicaciones_unicas'],['a_cuentas','cuentas'],['a_web','notas_web']].forEach(([n, f]) => f6num(n, 'kpis', f));
+const lanzRow = (r) => r.fase === 'Lanzamiento';
+[['k_sneg','negativos'],['k_sn','comentarios'],['a_sn','comentarios'],['a_sneg','negativos'],['a_spos','positivos']].forEach(([n, f]) => f6num(n, 'soc_resumen', f, lanzRow));
+
+// ---------- Resumen ----------
+dash.draw('a_riesgos', (ol) => {
+  const s = dash.data('riesgos'); ol.replaceChildren(); if (s.status !== 'ok') return;
+  s.data.slice().sort((a, b) => +a.orden - +b.orden).slice(0, 3).forEach((r) => {
+    const li = f6el('li'); li.append(f6el('b', '', r.riesgo + '. '), document.createTextNode(r.accion + ' '));
+    if (r.verificacion === 'Por validar') li.appendChild(f6ver('Por validar'));
+    ol.appendChild(li);
+  });
+});
+dash.draw('a_acciones', (ol) => {
+  const s = dash.data('plan'); ol.replaceChildren(); if (s.status !== 'ok') return;
+  const fmt = d3.utcFormat('%d/%m');
+  s.data.filter((r) => r.prioridad === 'Alta').sort((a, b) => d3.ascending(a.fecha, b.fecha)).slice(0, 3).forEach((r) => {
+    const li = f6el('li'); li.append(f6el('b', '', fmt(new Date(r.fecha + 'T00:00:00Z')) + ' · '), document.createTextNode(r.accion));
+    ol.appendChild(li);
+  });
+});
+const f6ins = (name, top) => dash.draw(name, (el) => {
+  const s = dash.data('insights');
+  if (f6status(el, s)) return;
+  const rows = s.data.filter((r) => String(r.top) === (top ? '1' : '0')).sort((a, b) => +a.orden - +b.orden);
+  el.replaceChildren(...rows.map((r, i) => {
+    const a = f6el('article', 'f6-ins' + (r.verificacion === 'Por validar' ? ' pend' : ''));
+    const t = f6el('div', 'top');
+    if (top) t.appendChild(f6el('span', 'num', String(i + 1)));
+    if (r.tema) t.appendChild(f6el('span', 'f6-pill mute', r.tema));
+    t.appendChild(f6ver(r.verificacion));
+    a.appendChild(t);
+    a.appendChild(f6el('h4', '', r.hallazgo));
+    const dl = f6el('dl');
+    [['Evidencia', r.evidencia, ''], ['Interpretación', r.interpretacion, ''], ['Acción', r.accion, 'act']].forEach(([k, v, c]) => dl.append(f6el('dt', '', k), f6el('dd', c, v)));
+    a.appendChild(dl);
+    a.appendChild(f6el('span', 'src', 'Fuente: ' + r.fuente));
+    return a;
+  }));
+});
+f6ins('ins_top', true);
+f6ins('ins_more', false);
+dash.draw('risklist', (el) => {
+  const s = dash.data('riesgos'); if (f6status(el, s)) return;
+  const lv = { Alto: 'bad', Medio: 'warn', Bajo: 'mute' };
+  el.replaceChildren(...s.data.slice().sort((a, b) => +a.orden - +b.orden).map((r) => {
+    const d = f6el('div', 'f6-risk' + (r.verificacion === 'Por validar' ? ' pend' : ''));
+    d.appendChild(f6el('span', 'lv f6-pill ' + (lv[r.nivel] || 'mute'), r.nivel));
+    const h = f6el('h4', '', r.riesgo); h.appendChild(f6ver(r.verificacion)); d.appendChild(h);
+    const p = f6el('p'); p.append(f6el('span', '', r.evidencia + ' '), f6el('b', '', 'Acción: ' + r.accion)); d.appendChild(p);
+    return d;
+  }));
+});
+
+// ---------- Media Intelligence ----------
+const f6prensa = (rows, opt = {}) => rows.filter((r) => r.repetida === 'No'
+  && (opt.allFases || f6.fase === 'all' || (f6.fase === 'evento' ? r.evento === 'Sí' : r.fase === f6.fase))
+  && (!f6.canal || r.canal === f6.canal) && (!f6.formato || r.formato === f6.formato)
+  && (!f6.tier || r.tier === f6.tier) && (!f6.medio || r.medio === f6.medio));
+const f6mnum = (name, fn) => dash.draw(name, (el) => {
+  const s = dash.data('lanz'); if (s.status !== 'ok') { el.textContent = '—'; return; }
+  el.textContent = fn(f6prensa(s.data));
+});
+f6mnum('m_unicas', (r) => f6fmt(new Set(r.map((p) => p.clave)).size));
+f6mnum('m_reg', (r) => f6fmt(r.length));
+f6mnum('m_cuentas', (r) => f6fmt(new Set(r.map((p) => p.medio)).size));
+f6mnum('m_perm', (r) => f6fmt(new Set(r.filter((p) => p.permanente === 'Sí').map((p) => p.clave)).size));
+f6mnum('m_pos', (r) => r.length ? f6pct(r.filter((p) => p.reputacion === 'Positivo').length, r.length) + '%' : '—');
+const f6setMedio = (m) => { f6.medio = f6.medio === m ? '' : m; document.querySelectorAll('#f-medio').forEach((s) => { s.value = f6.medio; }); f6redrawPrensa(); };
+window.f6redrawPrensa = () => ['m_unicas','m_reg','m_cuentas','m_perm','m_pos','chart_medios','chart_canal','chart_formato','chart_fecha','chart_tier','chart_rep','pubtable'].forEach((n) => dash.draw(n));
+dash.draw('chart_medios', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  const r = f6prensa(s.data);
+  const rows = Array.from(d3.rollup(r, (v) => ({ n: v.length, canal: v[0].canal }), (p) => p.medio), ([medio, v]) => ({ medio, registros: v.n, canal: v.canal })).sort((a, b) => b.registros - a.registros);
+  f6hbar(el, rows, 'medio', 'registros', { label: 'Registros por medio o cuenta', unit: 'registros', color: (d) => F6CANAL[d.canal] || 'var(--color-warn)', onClick: (d) => f6setMedio(d.medio), isSel: (d) => d.medio === f6.medio, anySel: !!f6.medio });
+});
+dash.draw('chart_canal', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  const r = f6prensa(s.data);
+  const nom = { 'Medio': 'Canal del medio', 'Cuenta personal': 'Cuenta personal de periodista', 'Creador': 'Creador / invitado especial', 'Sin clasificar': 'Sin clasificar' };
+  const rows = Array.from(d3.rollup(r, (v) => ({ reg: v.length, cuentas: new Set(v.map((p) => p.medio)).size }), (p) => p.canal), ([canal, v]) => ({ canal, nombre: nom[canal] || canal, registros: v.reg, cuentas: v.cuentas })).sort((a, b) => b.registros - a.registros);
+  f6hbar(el, rows, 'nombre', 'registros', { label: 'Registros por canal', unit: 'registros', color: (d) => F6CANAL[d.canal], fmtVal: (d) => `${f6fmt(d.registros)} · ${d.cuentas} cuentas` });
+});
+dash.draw('chart_formato', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  const r = f6prensa(s.data);
+  const rows = Array.from(d3.rollup(r, (v) => new Set(v.map((p) => p.clave)).size, (p) => p.formato), ([formato, n]) => ({ formato, publicaciones: n, efimero: formato === 'Historia IG' })).sort((a, b) => b.publicaciones - a.publicaciones);
+  f6hbar(el, rows, 'formato', 'publicaciones', { label: 'Publicaciones únicas por formato', unit: 'publicaciones únicas', color: (d) => d.efimero ? 'var(--cds-chart-muted)' : 'var(--f6-red)', fmtVal: (d) => `${f6fmt(d.publicaciones)}${d.efimero ? ' · 24 h' : ''}` });
+});
+dash.draw('chart_tier', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  const rows = Array.from(d3.rollup(f6prensa(s.data), (v) => v.length, (p) => p.tier), ([tier, n]) => ({ tier, registros: n })).sort((a, b) => d3.ascending(a.tier, b.tier));
+  f6hbar(el, rows, 'tier', 'registros', { label: 'Registros por tier', unit: 'registros', color: () => dash.colors[1] || dash.colors[0] });
+});
+dash.draw('chart_rep', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  const rows = Array.from(d3.rollup(f6prensa(s.data), (v) => v.length, (p) => p.reputacion), ([reputacion, n]) => ({ reputacion, registros: n })).sort((a, b) => b.registros - a.registros);
+  f6hbar(el, rows, 'reputacion', 'registros', { label: 'Registros por tono del clipping', unit: 'registros', color: (d) => F6SENT[d.reputacion] || 'var(--cds-chart-muted)' });
+});
+dash.draw('chart_fecha', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  el.replaceChildren();
+  const rows = Array.from(d3.rollup(f6prensa(s.data, { allFases: true }), (v) => ({ n: v.length, fase: v[0].fase }), (p) => p.fecha_iso), ([fecha_iso, v]) => ({ fecha_iso, fase: v.fase, registros: v.n })).filter((r) => r.fecha_iso).sort((a, b) => d3.ascending(a.fecha_iso, b.fecha_iso));
+  if (!rows.length) { el.appendChild(f6el('p', 'f6-note', 'Sin datos con estos filtros.')); return; }
+  const tip = f6el('div', 'f6-tip'); tip.hidden = true;
+  const W = Math.max(260, el.clientWidth || 300), H = 210, m = { t: 20, r: 8, b: 26, l: 30 };
+  const x = d3.scaleBand().domain(rows.map((r) => r.fecha_iso)).range([m.l, W - m.r]).padding(0.3);
+  const y = d3.scaleLinear().domain([0, d3.max(rows, (r) => r.registros) || 1]).nice().range([H - m.b, m.t]);
+  const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H).attr('role', 'img').attr('aria-label', 'Registros de la campaña por día y fase');
+  svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(-(W - m.l - m.r))).call((g) => { g.select('.domain').remove(); g.selectAll('line').style('stroke', 'var(--cds-chart-grid)'); });
+  const fmt = d3.utcFormat('%d/%m');
+  svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickFormat((d) => fmt(new Date(d + 'T00:00:00Z')))).call((g) => { g.select('.domain').style('stroke', 'var(--cds-chart-axis)'); g.selectAll('line').remove(); });
+  const col = { 'Pre-evento': 'var(--cds-chart-muted)', 'Día del lanzamiento': 'var(--f6-red)', 'Post-lanzamiento': '#e8838f' };
+  const nom = { 'Pre-evento': 'Previa', 'Día del lanzamiento': 'Día del lanzamiento', 'Post-lanzamiento': 'Posterior' };
+  svg.selectAll('rect.b').data(rows).join('rect').attr('class', 'b').attr('x', (d) => x(d.fecha_iso)).attr('width', x.bandwidth()).attr('y', (d) => y(d.registros)).attr('height', (d) => y(0) - y(d.registros)).attr('rx', 3)
+    .style('fill', (d) => col[d.fase])
+    .on('pointermove', (ev, d) => f6tipOn(el, tip, ev, `${fmt(new Date(d.fecha_iso + 'T00:00:00Z'))} · ${nom[d.fase]}: ${d.registros} registros`))
+    .on('pointerleave', () => { tip.hidden = true; });
+  svg.selectAll('text.v').data(rows).join('text').attr('class', 'val v').attr('x', (d) => x(d.fecha_iso) + x.bandwidth() / 2).attr('y', (d) => y(d.registros) - 5).attr('text-anchor', 'middle').text((d) => d.registros);
+  el.appendChild(tip);
+});
+const f6opts = (sel, values, cur, all) => { sel.replaceChildren(new Option(all, ''), ...values.map((v) => new Option(v, v))); sel.value = values.includes(cur) ? cur : ''; };
+dash.draw('sel_formato', (sel) => { const s = dash.data('lanz'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(s.data.map((r) => r.formato))).sort() : [], f6.formato, 'Todos'); });
+dash.draw('sel_tier', (sel) => { const s = dash.data('lanz'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(s.data.map((r) => r.tier))).sort() : [], f6.tier, 'Todos'); });
+dash.draw('sel_medio', (sel) => { const s = dash.data('lanz'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(s.data.map((r) => r.medio))).sort((a, b) => a.localeCompare(b, 'es')) : [], f6.medio, 'Todos'); });
+dash.draw('pubtable', (tb) => {
+  const s = dash.data('lanz');
+  tb.replaceChildren();
+  if (s.status !== 'ok') return;
+  const fase = { 'Pre-evento': 'Previa', 'Día del lanzamiento': 'Día 10/11', 'Post-lanzamiento': 'Posterior' };
+  const cuentasPorClave = d3.rollup(s.data, (v) => new Set(v.map((p) => p.medio)).size, (p) => p.clave);
+  const rows = s.data.filter((r) => (f6.fase === 'all' || (f6.fase === 'evento' ? r.evento === 'Sí' : r.fase === f6.fase)) && (!f6.canal || r.canal === f6.canal) && (!f6.formato || r.formato === f6.formato) && (!f6.tier || r.tier === f6.tier) && (!f6.medio || r.medio === f6.medio))
+    .sort((a, b) => d3.descending(a.fecha_iso, b.fecha_iso) || d3.ascending(a.medio, b.medio));
+  rows.forEach((r) => {
+    const tr = f6el('tr'); tr.dataset.key = r.fila;
+    if (r.canal_verificacion === 'Por validar') tr.className = 'pend';
+    f6cell(tr, r.fecha); f6cell(tr, fase[r.fase]); f6cell(tr, r.medio);
+    const tc = f6cell(tr, r.canal + ' '); if (r.canal_verificacion === 'Por validar') tc.appendChild(f6ver('Por validar'));
+    f6cell(tr, r.titulo); f6cell(tr, r.formato); f6cell(tr, r.tier);
+    f6cell(tr, '').appendChild(f6el('span', 'f6-pill ' + (r.reputacion === 'Positivo' ? 'ok' : r.reputacion === 'Negativo' ? 'bad' : 'mute'), r.reputacion));
+    f6cell(tr, r.repetida === 'Sí' ? 'Repetida (no suma)' : (cuentasPorClave.get(r.clave) > 1 ? 'Colaborativa' : 'Única'));
+    const td = f6cell(tr, ''); if (/^https?:/.test(r.link)) { const a = f6el('a', '', 'Abrir'); a.href = r.link; a.target = '_blank'; a.rel = 'noopener'; td.appendChild(a); }
+    tb.appendChild(tr);
+  });
+  if (!rows.length) { const tr = f6el('tr'); f6cell(tr, 'No hay publicaciones con estos filtros.').colSpan = 10; tb.appendChild(tr); }
+});
+
+// ---------- Social Listening ----------
+const f6soc = (rows, skip) => rows.filter((c) => c.tipo_autor === 'Usuario'
+  && (f6.sfase === 'Todas' || c.fase === f6.sfase)
+  && (!f6.splat || c.plataforma === f6.splat)
+  && (skip === 'sent' || !f6.ssent || c.sentimiento === f6.ssent)
+  && (skip === 'tema' || !f6.stema || c.tema === f6.stema)
+  && (skip === 'pub' || !f6.spub || c.publicacion === f6.spub));
+window.f6redrawSocial = () => ['s_n','s_pub','s_neg','s_pos','soc_stack','soc_temas','soc_nube','soc_lista','sel_stema','sel_spub'].forEach((n) => dash.draw(n));
+const f6snum = (name, fn) => dash.draw(name, (el) => { const s = dash.data('comentarios'); if (s.status !== 'ok') { el.textContent = '—'; return; } el.textContent = fn(f6soc(s.data)); });
+f6snum('s_n', (r) => f6fmt(r.length));
+f6snum('s_pub', (r) => f6fmt(new Set(r.map((c) => c.publicacion)).size));
+f6snum('s_neg', (r) => `${f6fmt(r.filter((c) => c.sentimiento === 'Negativo').length)} · ${f6pct(r.filter((c) => c.sentimiento === 'Negativo').length, r.length)}%`);
+f6snum('s_pos', (r) => `${f6fmt(r.filter((c) => c.sentimiento === 'Positivo').length)} · ${f6pct(r.filter((c) => c.sentimiento === 'Positivo').length, r.length)}%`);
+dash.draw('sel_stema', (sel) => { const s = dash.data('comentarios'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(f6soc(s.data, 'tema').map((c) => c.tema))).sort((a, b) => a.localeCompare(b, 'es')) : [], f6.stema, 'Todos'); });
+dash.draw('sel_spub', (sel) => { const s = dash.data('comentarios'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(f6soc(s.data, 'pub').map((c) => c.publicacion))).sort((a, b) => a.localeCompare(b, 'es')) : [], f6.spub, 'Todas'); });
+const f6segs = [{ key: 'Negativo', color: 'var(--color-bad)', label: 'negativos' }, { key: 'Neutro', color: 'var(--cds-chart-muted)', label: 'neutros' }, { key: 'Positivo', color: 'var(--color-ok)', label: 'positivos' }];
+const f6bySent = (rows, key) => Array.from(d3.group(rows, (c) => c[key]), ([k, v]) => ({ [key]: k, Negativo: v.filter((c) => c.sentimiento === 'Negativo').length, Neutro: v.filter((c) => c.sentimiento === 'Neutro').length, Positivo: v.filter((c) => c.sentimiento === 'Positivo').length, total: v.length })).sort((a, b) => b.total - a.total);
+dash.draw('soc_stack', (el) => {
+  const s = dash.data('comentarios'); if (f6status(el, s)) return;
+  f6hbar(el, f6bySent(f6soc(s.data, 'pub'), 'publicacion'), 'publicacion', 'total', { label: 'Comentarios por publicación y sentimiento', segs: f6segs, onClick: (d) => { f6.spub = f6.spub === d.publicacion ? '' : d.publicacion; f6redrawSocial(); }, isSel: (d) => d.publicacion === f6.spub, anySel: !!f6.spub, empty: 'Sin comentarios con estos filtros.' });
+});
+dash.draw('soc_temas', (el) => {
+  const s = dash.data('comentarios'); if (f6status(el, s)) return;
+  f6hbar(el, f6bySent(f6soc(s.data, 'tema'), 'tema'), 'tema', 'total', { label: 'Comentarios por tema y sentimiento', segs: f6segs, onClick: (d) => { f6.stema = f6.stema === d.tema ? '' : d.tema; f6redrawSocial(); }, isSel: (d) => d.tema === f6.stema, anySel: !!f6.stema, empty: 'Sin comentarios con estos filtros.' });
+});
+dash.draw('soc_nube', (el) => {
+  const s = dash.data('comentarios'); if (f6status(el, s)) return;
+  const vacias = new Set('de la el en y a que los las un una por para con no es se lo al del su sus mi me te le ya hay mas más muy pero como o sin si sí son ser era fue esta está este esto eso ese hace tan uno van tiene tener ni porque cuando todo todos hoy otro otros sobre entre también acá allá aquí ahí parece cual cuál cuantos cuántos pasó vez veces da dan'.split(' '));
+  const cnt = new Map(), neg = new Map();
+  f6soc(s.data).forEach((c) => {
+    new Set(String(c.comentario).toLowerCase().normalize('NFC').replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter((w) => w.length > 2 && !vacias.has(w)))
+      .forEach((w) => { cnt.set(w, (cnt.get(w) || 0) + 1); if (c.sentimiento === 'Negativo') neg.set(w, (neg.get(w) || 0) + 1); });
+  });
+  const rows = Array.from(cnt, ([palabra, veces]) => ({ palabra, veces, negativa: (neg.get(palabra) || 0) > veces / 2 })).sort((a, b) => b.veces - a.veces || d3.ascending(a.palabra, b.palabra)).slice(0, 40);
+  if (!rows.length) { el.replaceChildren(f6el('p', 'f6-note', 'Sin comentarios con estos filtros.')); return; }
+  const size = d3.scaleSqrt().domain([1, d3.max(rows, (r) => r.veces) || 1]).range([13, 34]);
+  el.replaceChildren(...rows.slice().sort((a, b) => d3.ascending(a.palabra, b.palabra)).map((r) => { const sp = f6el('span', r.negativa ? 'neg' : '', r.palabra); sp.style.fontSize = size(r.veces) + 'px'; sp.title = `${r.palabra}: ${r.veces}`; return sp; }));
+});
+dash.draw('soc_lista', (ul) => {
+  const s = dash.data('comentarios'); ul.replaceChildren(); if (s.status !== 'ok') return;
+  const ord = { Negativo: 0, Neutro: 1, Positivo: 2 };
+  const rows = f6soc(s.data).sort((a, b) => ord[a.sentimiento] - ord[b.sentimiento]);
+  rows.forEach((r) => {
+    const li = f6el('li');
+    const q = f6el('div', 'q', '“' + r.comentario + '”'); q.appendChild(f6el('span', 'w', `${r.publicacion} · ${r.plataforma} · ${r.tema}`));
+    li.append(f6el('span', 'f6-pill ' + (r.sentimiento === 'Positivo' ? 'ok' : r.sentimiento === 'Negativo' ? 'bad' : 'mute'), r.sentimiento), q); ul.appendChild(li);
+  });
+  if (!rows.length) ul.appendChild(f6el('li', 'f6-note', 'Sin comentarios con estos filtros.'));
+});
+dash.draw('chart_termometros', (el) => {
+  const s = dash.data('soc_resumen'); const k = dash.data('lanz');
+  if (f6status(el, s)) return; if (k.status !== 'ok') { el.textContent = '—'; return; }
+  const res = k.data.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+  const pub = s.data.find((r) => r.fase === 'Lanzamiento') || { positivos: 0, neutros: 0, negativos: 0, comentarios: 0 };
+  const rows = [
+    { nombre: 'Tono del clipping (medios y cuentas)', Positivo: res.filter((p) => p.reputacion === 'Positivo').length, Neutro: res.filter((p) => p.reputacion !== 'Positivo' && p.reputacion !== 'Negativo').length, Negativo: res.filter((p) => p.reputacion === 'Negativo').length },
+    { nombre: 'Sentimiento del público (comentarios)', Positivo: pub.positivos, Neutro: pub.neutros, Negativo: pub.negativos }
+  ].map((r) => { const t = r.Positivo + r.Neutro + r.Negativo || 1; return { nombre: r.nombre, n: t, Positivo: r.Positivo / t * 100, Neutro: r.Neutro / t * 100, Negativo: r.Negativo / t * 100 }; });
+  f6hbar(el, rows, 'nombre', 'n', { label: 'Tono del clipping frente al sentimiento del público, en porcentaje', bh: 26, max: 100, segs: [{ key: 'Positivo', color: 'var(--color-ok)', label: '% positivo' }, { key: 'Neutro', color: 'var(--cds-chart-muted)', label: '% neutro' }, { key: 'Negativo', color: 'var(--color-bad)', label: '% negativo' }], fmtVal: (d) => `${Math.round(d.Positivo)}% pos. · ${Math.round(d.Negativo)}% neg. (n=${d.n})` });
+});
+
+// ---------- Message Tracking ----------
+const f6msgRows = (s) => s.data.filter((r) => (!f6.mcanal || r.canal === f6.mcanal) && (!f6.mtipo || r.tipo === f6.mtipo));
+dash.draw('chart_msgs', (el) => {
+  const s = dash.data('msg_matriz'); if (f6status(el, s)) return;
+  const col = { Alta: 'var(--color-ok)', Moderada: 'var(--color-warn)', Baja: 'var(--cds-chart-muted)', 'Sin presencia': 'var(--color-bad)' };
+  const rows = Array.from(d3.rollup(f6msgRows(s), (v) => ({ n: d3.sum(v, (r) => r.registros), c: v.filter((r) => r.registros > 0).length }), (r) => r.mensaje), ([mensaje, v]) => ({ mensaje, registros: v.n, cuentas: v.c, nivel: f6nivel(v.n) })).sort((a, b) => b.registros - a.registros);
+  f6hbar(el, rows, 'mensaje', 'registros', { label: 'Registros por mensaje', unit: 'registros', color: (d) => col[d.nivel], fmtVal: (d) => d.registros ? `${d.registros} · ${d.cuentas} cuentas` : 'Sin presencia' });
+});
+const f6heatCuentas = (s) => Array.from(d3.rollup(f6msgRows(s), (v) => d3.sum(v, (r) => r.registros), (r) => r.medio), ([medio, n]) => ({ medio, n })).filter((c) => c.n > 0).sort((a, b) => b.n - a.n).map((c) => c.medio);
+dash.draw('heat_head', (th) => {
+  const s = dash.data('msg_matriz'); th.replaceChildren(); if (s.status !== 'ok') return;
+  const tr = f6el('tr'); tr.appendChild(f6el('th', '', 'Mensaje'));
+  f6heatCuentas(s).forEach((m) => tr.appendChild(f6el('th', 'v', m)));
+  tr.appendChild(f6el('th', 'num', 'Total'));
+  th.appendChild(tr);
+});
+dash.draw('heat_body', (tb) => {
+  const s = dash.data('msg_matriz'); tb.replaceChildren(); if (s.status !== 'ok') return;
+  const cuentas = f6heatCuentas(s); const rows = f6msgRows(s);
+  const max = d3.max(rows, (r) => r.registros) || 1;
+  const msgs = Array.from(new Set(rows.map((r) => r.mensaje)));
+  msgs.forEach((m) => {
+    const tr = f6el('tr'); tr.dataset.key = encodeURIComponent(m); f6cell(tr, m);
+    let tot = 0;
+    cuentas.forEach((c) => {
+      const n = d3.sum(rows.filter((r) => r.mensaje === m && r.medio === c), (r) => r.registros); tot += n;
+      const td = f6cell(tr, n ? String(n) : '', 'c');
+      if (n) td.style.background = `color-mix(in srgb, var(--f6-red) ${Math.round(12 + 70 * n / max)}%, transparent)`;
+      td.title = `${m} · ${c}: ${n}`;
+    });
+    f6cell(tr, f6fmt(tot), 'num');
+    tb.appendChild(tr);
+  });
+});
+dash.draw('msgtable', (tb) => {
+  const s = dash.data('mensajes'); tb.replaceChildren(); if (s.status !== 'ok') return;
+  s.data.filter((r) => !f6.mtipo || r.tipo === f6.mtipo).forEach((r) => {
+    const tr = f6el('tr'); tr.dataset.key = encodeURIComponent(r.mensaje);
+    f6cell(tr, r.mensaje); f6cell(tr, r.tipo); f6cell(tr, f6fmt(r.registros), 'num'); f6cell(tr, f6fmt(r.cuentas), 'num');
+    f6cell(tr, '').appendChild(f6el('span', 'f6-pill ' + (r.nivel === 'Alta' ? 'ok' : r.nivel === 'Moderada' ? 'warn' : r.nivel === 'Baja' ? 'mute' : 'bad'), r.nivel));
+    f6cell(tr, r.ejemplo);
+    tb.appendChild(tr);
+  });
+});
+
+// ---------- Contenidos ----------
+dash.draw('gallery', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  const rows = s.data.filter((r) => r.evento === 'Sí' && r.repetida === 'No' && r.formato !== 'Nota web' && (!f6.galFmt || r.formato === f6.galFmt));
+  el.replaceChildren(...rows.map((r) => {
+    const d = f6el('div', 'f6-piece');
+    const m = f6el('div', 'm'); m.append(f6el('span', '', r.medio), f6el('span', '', r.formato));
+    d.append(m, f6el('div', 't', r.titulo.replace(/\s*\(historia[^)]*\)/i, '')));
+    if (/^https?:/.test(r.link)) { const a = f6el('a', '', r.formato === 'Historia IG' ? 'Ver captura' : 'Ver publicación'); a.href = r.link; a.target = '_blank'; a.rel = 'noopener'; d.appendChild(a); }
+    return d;
+  }));
+});
+
+// ---------- Media Relationship Tracker ----------
+dash.draw('chart_embudo', (el) => {
+  const s = dash.data('conv'); if (f6status(el, s)) return;
+  const c = s.data[0];
+  const rows = [
+    { etapa: 'Periodistas invitados', n: c.periodistas_invitados },
+    { etapa: 'Asistieron', n: c.asistieron },
+    { etapa: 'Publicaron (cualquier canal)', n: c.periodistas_publicaron },
+    { etapa: 'Medios invitados', n: c.medios_invitados },
+    { etapa: 'Medios con cobertura', n: c.medios_cobertura },
+    { etapa: 'En el canal del medio', n: c.medios_canal }
+  ];
+  f6hbar(el, rows, 'etapa', 'n', { label: 'Embudo de convocatoria y cobertura', unit: '', bh: 22, color: (d, i) => i < 3 ? 'var(--f6-red)' : '#e8838f', fmtVal: (d) => f6fmt(d.n) });
+});
+dash.draw('tracker', (tb) => {
+  const s = dash.data('seguimiento'); tb.replaceChildren(); if (s.status !== 'ok') return;
+  const orden = { 'PENDIENTE': 0, 'EN SEGUIMIENTO': 1, 'PUBLICADO': 2 };
+  const tipoOrden = { 'Invitado': 0, 'Invitado especial': 1, 'No invitado': 2, 'Prensa previa': 3, 'Rebote del envío': 4 };
+  const rows = s.data.filter((r) => (!f6.ttipo || r.tipo === f6.ttipo) && (!f6.test || r.estado === f6.test) && (!f6.tver || r.verificacion === f6.tver))
+    .sort((a, b) => (tipoOrden[a.tipo] ?? 9) - (tipoOrden[b.tipo] ?? 9) || orden[a.estado] - orden[b.estado]);
+  rows.forEach((r) => {
+    const tr = f6el('tr'); tr.dataset.key = r.id; if (r.verificacion === 'Por validar') tr.className = 'pend';
+    f6cell(tr, r.periodista); f6cell(tr, r.medio); f6cell(tr, r.tipo); f6cell(tr, r.asistio);
+    f6cell(tr, '').appendChild(f6pill(r.estado));
+    f6cell(tr, r.cobertura); f6cell(tr, f6fmt(r.publicaciones), 'num');
+    f6cell(tr, '').appendChild(f6ver(r.verificacion));
+    tb.appendChild(tr);
+  });
+  if (!rows.length) { const tr = f6el('tr'); f6cell(tr, 'No hay contactos con estos filtros.').colSpan = 8; tb.appendChild(tr); }
+});
+dash.draw('correo_panel', (el) => {
+  const f = dash.data('envio'); if (f6status(el, f)) return;
+  const e = f.data[0]; const k = f6el('div', 'f6-kpis');
+  const kpi = (n, l) => { const d = f6el('div', 'f6-kpi'); d.append(f6el('span', 'n', f6fmt(n)), f6el('span', 'l', l)); return d; };
+  k.append(kpi(+e.destinatarios, 'Destinatarios'), kpi(+e.destinatarios - +e.rebotes, 'Entregados'), kpi(+e.rebotes, 'Rebotes'));
+  el.replaceChildren(k, f6el('p', 'f6-note', 'Envío del ' + e.fecha + '. Los rebotes se reenviarán solo con el enlace al kit de prensa.'));
+});
+
+// ---------- Next Steps ----------
+const f6plan = (s) => s.data.filter((r) => (!f6.pprio || r.prioridad === f6.pprio) && (!f6.ptipo || r.tipo === f6.ptipo) && (!f6.presp || r.responsable === f6.presp));
+dash.draw('sel_ptipo', (sel) => { const s = dash.data('plan'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(s.data.map((r) => r.tipo))).sort((a, b) => a.localeCompare(b, 'es')) : [], f6.ptipo, 'Todos'); });
+dash.draw('sel_presp', (sel) => { const s = dash.data('plan'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(s.data.map((r) => r.responsable))).sort((a, b) => a.localeCompare(b, 'es')) : [], f6.presp, 'Todos'); });
+dash.draw('calendar', (el) => {
+  const s = dash.data('plan'); if (f6status(el, s)) return;
+  const rows = f6plan(s);
+  const start = new Date('2026-11-11T00:00:00Z');
+  const fmtD = d3.utcFormat('%d/%m'), fmtW = (d) => ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'][d.getUTCDay()];
+  const hoy = new Date(); const hoyIso = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, '0')}-${String(hoy.getDate()).padStart(2, '0')}`;
+  const days = d3.range(15).map((i) => new Date(start.getTime() + i * 864e5));
+  el.replaceChildren(...days.map((d) => {
+    const iso = d.toISOString().slice(0, 10);
+    const items = rows.filter((r) => r.fecha === iso);
+    const wk = d.getUTCDay() === 0 || d.getUTCDay() === 6;
+    if (wk && !items.length) { const c = f6el('div', 'f6-day wk'); const h = f6el('div', 'h'); h.append(f6el('span', '', fmtW(d)), f6el('span', '', fmtD(d))); c.appendChild(h); return c; }
+    const c = f6el('div', 'f6-day' + (iso === hoyIso ? ' today' : '') + (wk ? ' wk' : ''));
+    const h = f6el('div', 'h'); h.append(f6el('span', '', fmtW(d)), f6el('span', '', fmtD(d))); c.appendChild(h);
+    items.forEach((r) => { const it = f6el('div', 'it' + (r.prioridad === 'Alta' ? ' alta' : ''), r.accion); it.title = `${r.tipo} · ${r.responsable}`; c.appendChild(it); });
+    return c;
+  }));
+});
+dash.draw('plantable', (tb) => {
+  const s = dash.data('plan'); tb.replaceChildren(); if (s.status !== 'ok') return;
+  const fmt = d3.utcFormat('%d/%m');
+  f6plan(s).slice().sort((a, b) => d3.ascending(a.fecha, b.fecha)).forEach((r) => {
+    const tr = f6el('tr'); tr.dataset.key = encodeURIComponent(r.accion);
+    f6cell(tr, fmt(new Date(r.fecha + 'T00:00:00Z'))); f6cell(tr, r.accion); f6cell(tr, r.tipo);
+    f6cell(tr, '').appendChild(f6el('span', 'f6-pill ' + (r.prioridad === 'Alta' ? 'bad' : 'warn'), r.prioridad));
+    f6cell(tr, r.impacto); f6cell(tr, r.facilidad); f6cell(tr, r.responsable);
+    tb.appendChild(tr);
+  });
+});
+dash.draw('gaptable', (tb) => {
+  const s = dash.data('pendientes'); tb.replaceChildren(); if (s.status !== 'ok') return;
+  s.data.forEach((r) => {
+    const tr = f6el('tr'); tr.dataset.key = encodeURIComponent(r.dato); if (r.verificacion !== 'Verificado') tr.className = 'pend';
+    const td = f6cell(tr, r.dato + ' '); td.appendChild(f6ver(r.verificacion === 'Verificado' ? 'Verificado' : 'Por validar'));
+    f6cell(tr, r.estado); f6cell(tr, r.impacto); f6cell(tr, r.que_falta); tb.appendChild(tr);
+  });
+});
+dash.draw('historial', (ul) => {
+  const s = dash.data('historial'); ul.replaceChildren(); if (s.status !== 'ok') return;
+  s.data.slice().reverse().forEach((r) => { const li = f6el('li'); li.append(f6el('b', '', `${r.fecha} · ${r.version}. `), document.createTextNode(`${r.cambio} Fuente: ${r.fuente}.`)); ul.appendChild(li); });
+});
+</script>
+
+<script>
+// ---------- Navegación y filtros (solo escuchan) ----------
+(() => {
+  const tabs = Array.from(document.querySelectorAll('.f6-tab'));
+  const panels = Array.from(document.querySelectorAll('[data-panel]'));
+  const open = (id) => {
+    if (!panels.some((p) => p.dataset.panel === id)) id = 'resumen';
+    panels.forEach((p) => { p.hidden = p.dataset.panel !== id; });
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
+    dash.setLink(id);
+  };
+  tabs.forEach((t) => t.addEventListener('click', () => open(t.dataset.tab)));
+  const h = (location.hash || '').replace('#', '');
+  if (h) open(h);
+
+  const bind = (id, key, redraw) => document.querySelectorAll('#' + id).forEach((sel) => sel.addEventListener('change', () => { window.f6[key] = sel.value; redraw(); }));
+  const prensa = () => window.f6redrawPrensa();
+  bind('f-fase', 'fase', prensa); bind('f-canal', 'canal', prensa); bind('f-formato', 'formato', prensa); bind('f-tier', 'tier', prensa); bind('f-medio', 'medio', prensa);
+  document.querySelectorAll('#f-reset-prensa').forEach((b) => b.addEventListener('click', () => {
+    Object.assign(window.f6, { fase: 'evento', canal: '', formato: '', tier: '', medio: '' });
+    [['f-fase', 'evento'], ['f-canal', ''], ['f-formato', ''], ['f-tier', ''], ['f-medio', '']].forEach(([i, v]) => document.querySelectorAll('#' + i).forEach((s) => { s.value = v; }));
+    prensa();
+  }));
+  const social = () => window.f6redrawSocial();
+  bind('f-sfase', 'sfase', social); bind('f-splat', 'splat', social); bind('f-ssent', 'ssent', social); bind('f-stema', 'stema', social); bind('f-spub', 'spub', social);
+  document.querySelectorAll('#f-reset-social').forEach((b) => b.addEventListener('click', () => {
+    Object.assign(window.f6, { sfase: 'Lanzamiento', splat: '', ssent: '', stema: '', spub: '' });
+    [['f-sfase', 'Lanzamiento'], ['f-splat', ''], ['f-ssent', ''], ['f-stema', ''], ['f-spub', '']].forEach(([i, v]) => document.querySelectorAll('#' + i).forEach((s) => { s.value = v; }));
+    social();
+  }));
+  const msgs = () => ['chart_msgs', 'heat_head', 'heat_body', 'msgtable'].forEach((n) => dash.draw(n));
+  bind('f-mcanal', 'mcanal', msgs); bind('f-mtipo', 'mtipo', msgs);
+  const trk = () => dash.draw('tracker');
+  bind('f-ttipo', 'ttipo', trk); bind('f-test', 'test', trk); bind('f-tver', 'tver', trk);
+  const plan = () => ['calendar', 'plantable'].forEach((n) => dash.draw(n));
+  bind('f-pprio', 'pprio', plan); bind('f-ptipo', 'ptipo', plan); bind('f-presp', 'presp', plan);
+
+  const bs = Array.from(document.querySelectorAll('.f6-chip[data-fmt]'));
+  bs.forEach((b) => b.addEventListener('click', () => {
+    window.f6.galFmt = b.getAttribute('data-fmt');
+    bs.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    dash.draw('gallery');
+  }));
+})();
+</script>
+<footer class="f6-footer"><span>ALTA Comunicación para Stellantis · FIAT 600 Hybrid · Informe de solo lectura</span><span class="f6-upd" id="f6-upd-foot"></span></footer>
+</main>
+<script>
+dash.boot({
+  grilla: 'data/grilla.json', cuentas: 'data/cuentas.json', seguimiento_base: 'data/seguimiento.json', insights: 'data/insights.json',
+  riesgos: 'data/riesgos.json', plan: 'data/plan.json', pendientes: 'data/pendientes.json', historial: 'data/historial.json',
+  envio: 'data/envio.json', comentarios: 'data/comentarios.csv', meta: 'data/meta.json'
+}).then((f) => {
+  const t = 'Datos actualizados: ' + f.meta.actualizado;
+  document.querySelectorAll('#f6-upd, #f6-upd-foot').forEach((e) => { e.textContent = t; });
+}).catch((e) => { console.error(e); document.querySelectorAll('#f6-upd').forEach((x) => { x.textContent = 'No se pudieron cargar los datos. Recarga la página.'; }); });
+</script>
+</body>
+</html>

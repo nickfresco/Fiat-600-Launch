@@ -1,0 +1,42 @@
+[
+ {
+  "orden": 1,
+  "riesgo": "Relación con medios no invitados",
+  "nivel": "Alto",
+  "verificacion": "Verificado",
+  "evidencia": "Medios no convocados objetaron el formato íntimo; dos piezas críticas el 9/11; anuncio de un grupo de medios de no publicar a la marca.",
+  "accion": "Conversación senior con los medios afectados y criterio de invitación claro para próximos lanzamientos."
+ },
+ {
+  "orden": 2,
+  "riesgo": "Precio lista inconsistente",
+  "nivel": "Medio",
+  "verificacion": "Por validar",
+  "evidencia": "Comunicado: $24.990.000. Circular y Coral Menta: $25.790.000. Precio final con bonos ($23.490.000) coincide.",
+  "accion": "Validar con Fiat antes de corregir el comunicado."
+ },
+ {
+  "orden": 3,
+  "riesgo": "Objeciones del público: precio y posventa",
+  "nivel": "Medio",
+  "verificacion": "Verificado",
+  "evidencia": "11 de 21 comentarios del público en posts del lanzamiento son negativos; 10 en el post de Autocosmos.",
+  "accion": "Respuestas de comunidad sobre repuestos, posventa y precio vs. equipamiento."
+ },
+ {
+  "orden": 4,
+  "riesgo": "Expectativa de híbrido completo",
+  "nivel": "Medio",
+  "verificacion": "Verificado",
+  "evidencia": "Autocosmos y Paola Leyton aclararon que es microhíbrido (MHEV); un usuario preguntó por la autonomía de carga.",
+  "accion": "Reforzar \"microhíbrido de 48 V, no se enchufa\" en test drives y entrevistas."
+ },
+ {
+  "orden": 5,
+  "riesgo": "Cobertura efímera y Tier 1 sin material",
+  "nivel": "Medio",
+  "verificacion": "Verificado",
+  "evidencia": "60 de 75 publicaciones únicas son historias de 24 horas; solo 3 notas web. La Tercera, Publimetro y Metro no recibieron el comunicado (rebote).",
+  "accion": "Reenviar sin adjuntos y generar notas de manejo con test drives."
+ }
+]

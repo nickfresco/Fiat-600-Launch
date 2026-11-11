@@ -1,0 +1,104 @@
+[
+ {
+  "cuenta": "Autocosmos",
+  "canal": "Medio",
+  "medio_padre": "Autocosmos",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Rutamotor",
+  "canal": "Medio",
+  "medio_padre": "Rutamotor",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "The Clinic",
+  "canal": "Medio",
+  "medio_padre": "The Clinic",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Estilo Motor",
+  "canal": "Medio",
+  "medio_padre": "Estilo Motor",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Altorque",
+  "canal": "Medio",
+  "medio_padre": "Altorque",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Mujer y Estilo",
+  "canal": "Medio",
+  "medio_padre": "Mujer y Estilo",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Tuerca Aventura",
+  "canal": "Medio",
+  "medio_padre": "Tuerca Aventura",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Biobio Chile",
+  "canal": "Medio",
+  "medio_padre": "Biobío Chile",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Motor Panamericano",
+  "canal": "Medio",
+  "medio_padre": "Motor Panamericano",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Automujer",
+  "canal": "Medio",
+  "medio_padre": "Automujer",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Paola Leyton (Estilo Motor)",
+  "canal": "Cuenta personal",
+  "medio_padre": "Estilo Motor",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Ángeles Gana (Estilo Motor)",
+  "canal": "Cuenta personal",
+  "medio_padre": "Estilo Motor",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Cyntia Becerra (Mujer y Estilo)",
+  "canal": "Cuenta personal",
+  "medio_padre": "Mujer y Estilo",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Leo Pacheco (El Mercurio)",
+  "canal": "Cuenta personal",
+  "medio_padre": "El Mercurio",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "AutodeayerCL",
+  "canal": "Cuenta personal",
+  "medio_padre": "El Mercurio",
+  "verificacion": "Por validar"
+ },
+ {
+  "cuenta": "Coral Menta",
+  "canal": "Cuenta personal",
+  "medio_padre": "Tuerca Aventura",
+  "verificacion": "Por validar"
+ },
+ {
+  "cuenta": "Fito Rayo",
+  "canal": "Creador",
+  "medio_padre": "Fito Rayo",
+  "verificacion": "Verificado"
+ }
+]

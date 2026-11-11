@@ -1,0 +1,152 @@
+[
+ {
+  "fecha": "2026-11-11",
+  "accion": "Revisar con Stellantis la relación con los medios no invitados y coordinar una conversación senior",
+  "tipo": "Relación con medios",
+  "prioridad": "Alta",
+  "impacto": "Alto",
+  "facilidad": "Media",
+  "responsable": "Dirección ALTA + Daniela Poblete",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-11",
+  "accion": "Responder a los medios no invitados con un mensaje personal y oferta de test drive",
+  "tipo": "Relación con medios",
+  "prioridad": "Alta",
+  "impacto": "Alto",
+  "facilidad": "Fácil",
+  "responsable": "Nicolás (ALTA), con OK de Stellantis",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-11",
+  "accion": "Reenviar el comunicado solo con el link al kit a La Tercera, Publimetro, Metro y Futuro 360",
+  "tipo": "Distribución",
+  "prioridad": "Alta",
+  "impacto": "Alto",
+  "facilidad": "Fácil",
+  "responsable": "Nicolás (ALTA)",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-11",
+  "accion": "Enviar el comunicado de Fito Rayo a medios lifestyle y regionales",
+  "tipo": "Comunicado",
+  "prioridad": "Alta",
+  "impacto": "Alto",
+  "facilidad": "Fácil",
+  "responsable": "ALTA",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-12",
+  "accion": "Seguimiento a El Mostrador, Bandoleras y El Mercurio: fotos del evento y ángulo sugerido",
+  "tipo": "Seguimiento",
+  "prioridad": "Alta",
+  "impacto": "Alto",
+  "facilidad": "Fácil",
+  "responsable": "Nicolás (ALTA)",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-11",
+  "accion": "Validar con Fiat el precio lista y bono TMP (comunicado vs. circular) antes de corregir materiales",
+  "tipo": "Mensajes",
+  "prioridad": "Alta",
+  "impacto": "Medio",
+  "facilidad": "Fácil",
+  "responsable": "Daniela Poblete / Ricardo Passos",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-13",
+  "accion": "Agendar test drives: Autocosmos, Rutamotor y Altorque primero; sumar Motor Panamericano y Automujer",
+  "tipo": "Test drive",
+  "prioridad": "Alta",
+  "impacto": "Alto",
+  "facilidad": "Media",
+  "responsable": "ALTA + Fiat (autos de prensa)",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-16",
+  "accion": "Enviar el comunicado n°3 sobre la historia del 600; ofrecerlo primero a The Clinic",
+  "tipo": "Comunicado",
+  "prioridad": "Media",
+  "impacto": "Medio",
+  "facilidad": "Fácil",
+  "responsable": "ALTA",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-17",
+  "accion": "Entrevistas con Ricardo Passos sobre la nueva etapa europea y el microhíbrido",
+  "tipo": "Vocería",
+  "prioridad": "Alta",
+  "impacto": "Alto",
+  "facilidad": "Media",
+  "responsable": "ALTA + Fiat",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-18",
+  "accion": "Contenido explicativo: qué es un microhíbrido, con cifras de ANAC, para medios tech y RRSS de Fiat",
+  "tipo": "Contenido",
+  "prioridad": "Media",
+  "impacto": "Medio",
+  "facilidad": "Fácil",
+  "responsable": "ALTA + RRSS Fiat",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-19",
+  "accion": "Reel conjunto Fito Rayo × 600 Hybrid y reutilización de piezas de medios (con permiso)",
+  "tipo": "RRSS / creadores",
+  "prioridad": "Media",
+  "impacto": "Medio",
+  "facilidad": "Media",
+  "responsable": "RRSS Fiat + Fito Rayo",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-20",
+  "accion": "Test drives de fin de semana con enfoque Dolce Vita: Coral Menta, Mujer y Estilo y Bandoleras",
+  "tipo": "Creadores",
+  "prioridad": "Media",
+  "impacto": "Medio",
+  "facilidad": "Media",
+  "responsable": "ALTA",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-25",
+  "accion": "Corte de 15 días: actualizar la grilla con impresiones de Analytics, este dashboard y el informe al cliente",
+  "tipo": "Medición",
+  "prioridad": "Alta",
+  "impacto": "Medio",
+  "facilidad": "Fácil",
+  "responsable": "Nicolás + Analytics",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-12",
+  "accion": "Preparar respuestas de comunidad sobre posventa, repuestos y precio versus equipamiento",
+  "tipo": "Comunidad",
+  "prioridad": "Media",
+  "impacto": "Medio",
+  "facilidad": "Fácil",
+  "responsable": "ALTA + RRSS Fiat",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-20",
+  "accion": "Definir con Stellantis un criterio de invitación para próximos lanzamientos y una segunda instancia para medios no convocados",
+  "tipo": "Relación con medios",
+  "prioridad": "Media",
+  "impacto": "Alto",
+  "facilidad": "Media",
+  "responsable": "ALTA + Stellantis",
+  "estado": "Pendiente"
+ }
+]

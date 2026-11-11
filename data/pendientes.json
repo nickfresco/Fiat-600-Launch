@@ -1,0 +1,58 @@
+[
+ {
+  "dato": "Precio lista del 600 Hybrid",
+  "estado": "Por validar",
+  "impacto": "Comunicado ($24.990.000) y circular ($25.790.000) no coinciden; Coral Menta ya publicó el de la circular.",
+  "que_falta": "Confirmación de Fiat (Ricardo Passos) del precio lista y bono TMP",
+  "verificacion": "Por validar"
+ },
+ {
+  "dato": "Comentarios de redes sociales",
+  "estado": "Parcial",
+  "impacto": "Se revisaron 13 publicaciones de Instagram y Facebook (59 comentarios, 53 de usuarios) el 10/11 a las 22:30. Las historias no tienen comentarios públicos.",
+  "que_falta": "Repetir la revisión en 48 horas y sumar YouTube, TikTok y la nota web de Autocosmos cuando salgan",
+  "verificacion": "Por validar"
+ },
+ {
+  "dato": "Alcance e interacciones",
+  "estado": "Vacío en la grilla",
+  "impacto": "Las columnas Seguidores e Imp. Potenciales están vacías en los registros del lanzamiento.",
+  "que_falta": "Pedir a Analytics que complete la grilla; el dashboard las toma solo",
+  "verificacion": "Por validar"
+ },
+ {
+  "dato": "Texto completo de las notas web",
+  "estado": "Sin acceso",
+  "impacto": "Los mensajes se miden por titular y descripción registrados en la grilla, no por el cuerpo de las notas.",
+  "que_falta": "Opcional: pegar el texto de las notas para un análisis más fino",
+  "verificacion": "Por validar"
+ },
+ {
+  "dato": "Alpha Dos Media",
+  "estado": "Pendiente de confirmación",
+  "impacto": "Aceptó la invitación de calendario, pero no figura en la lista de invitados.",
+  "que_falta": "Confirmar si asistió y en qué rol",
+  "verificacion": "Por validar"
+ },
+ {
+  "dato": "Nota de Leo Pacheco en El Mercurio",
+  "estado": "Pendiente",
+  "impacto": "Publicó en sus cuentas personales; no hay nota del diario registrada.",
+  "que_falta": "Confirmar fecha de publicación",
+  "verificacion": "Por validar"
+ },
+ {
+  "dato": "Pauta pagada",
+  "estado": "No hay",
+  "impacto": "Todos los registros del lanzamiento son Earned Media o Orgánico; no hay resultados pagados que separar.",
+  "que_falta": "—",
+  "verificacion": "Verificado"
+ },
+ {
+  "dato": "Clasificación de Coral Menta y AutodeayerCL",
+  "estado": "Por validar",
+  "impacto": "Se cuentan como cuentas personales de periodistas (Andrea Araya y Leo Pacheco), no como medios.",
+  "que_falta": "Confirmar con cada periodista",
+  "verificacion": "Por validar"
+ }
+]
