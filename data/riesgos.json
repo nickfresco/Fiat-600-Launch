@@ -1,11 +1,11 @@
 [
  {
   "orden": 1,
-  "riesgo": "Relación con medios no invitados",
-  "nivel": "Alto",
+  "riesgo": "Relación con medios no convocados",
+  "nivel": "Medio",
   "verificacion": "Verificado",
-  "evidencia": "Medios no convocados objetaron el formato íntimo; dos piezas críticas el 9/11; anuncio de un grupo de medios de no publicar a la marca.",
-  "accion": "Conversación senior con los medios afectados y criterio de invitación claro para próximos lanzamientos."
+  "evidencia": "Disconformidad de periodistas que no participaron del formato íntimo. Ya se hizo un feedback interno y el tema está en gestión y seguimiento.",
+  "accion": "Conversaciones directas a cargo de Constanza Graham y seguimiento caso a caso."
  },
  {
   "orden": 2,
@@ -28,7 +28,7 @@
   "riesgo": "Cobertura efímera",
   "nivel": "Medio",
   "verificacion": "Verificado",
-  "evidencia": "63 de 91 publicaciones únicas son historias de 24 horas; 9 notas web.",
+  "evidencia": "63 de 93 publicaciones únicas son historias de 24 horas; 9 notas web.",
   "accion": "Generar notas de manejo con test drives y convertir historias en notas web."
  }
 ]

@@ -1,22 +1,22 @@
 [
  {
   "fecha": "2026-11-11",
-  "accion": "Revisar con Stellantis la relación con los medios no invitados y coordinar una conversación senior",
+  "accion": "Feedback interno para alinear mensajes y criterios de respuesta a periodistas no convocados",
   "tipo": "Relación con medios",
   "prioridad": "Alta",
   "impacto": "Alto",
   "facilidad": "Media",
-  "responsable": "Dirección ALTA + Daniela Poblete",
-  "estado": "Pendiente"
+  "responsable": "Equipo ALTA",
+  "estado": "Realizado"
  },
  {
-  "fecha": "2026-11-11",
-  "accion": "Responder a los medios no invitados con un mensaje personal y oferta de test drive",
+  "fecha": "2026-11-12",
+  "accion": "Conversaciones directas con los periodistas no convocados, con ofrecimiento de test drive o material exclusivo",
   "tipo": "Relación con medios",
   "prioridad": "Alta",
   "impacto": "Alto",
   "facilidad": "Fácil",
-  "responsable": "Nicolás (ALTA), con OK de Stellantis",
+  "responsable": "Constanza Graham",
   "estado": "Pendiente"
  },
  {
@@ -121,12 +121,22 @@
  },
  {
   "fecha": "2026-11-20",
-  "accion": "Definir con Stellantis un criterio de invitación para próximos lanzamientos y una segunda instancia para medios no convocados",
-  "tipo": "Relación con medios",
+  "accion": "Presentar a Stellantis los learnings del lanzamiento (producción, cupos y plan para medios no convocados)",
+  "tipo": "Learnings",
   "prioridad": "Media",
   "impacto": "Alto",
   "facilidad": "Media",
-  "responsable": "ALTA + Stellantis",
+  "responsable": "ALTA",
+  "estado": "Pendiente"
+ },
+ {
+  "fecha": "2026-11-19",
+  "accion": "Seguimiento del relacionamiento con medios no convocados: registrar cada conversación y su resultado en el tracker",
+  "tipo": "Relación con medios",
+  "prioridad": "Media",
+  "impacto": "Alto",
+  "facilidad": "Fácil",
+  "responsable": "Constanza Graham + ALTA",
   "estado": "Pendiente"
  }
 ]

@@ -1,0 +1,37 @@
+[
+ {
+  "letra": "A",
+  "area": "Producción de eventos",
+  "titulo": "Producción más robusta y planificada",
+  "explicacion": "Un lanzamiento necesita anticipar las necesidades operativas, logísticas y de atención a los invitados.",
+  "recomendacion": "Planificar la producción con más anticipación, con un responsable a cargo, checklist logístico y plan de atención a invitados desde el diseño del evento."
+ },
+ {
+  "letra": "B",
+  "area": "Cupos de invitación",
+  "titulo": "Al menos 15 cupos para prensa",
+  "explicacion": "Con un formato muy reducido quedaron fuera medios relevantes y hubo reclamos por no haber sido considerados.",
+  "recomendacion": "Contemplar un mínimo de 15 cupos para periodistas y medios en próximos eventos, para tener holgura en la convocatoria. Recomendación de ALTA, sujeta a validación de Stellantis."
+ },
+ {
+  "letra": "C",
+  "area": "Medios no convocados",
+  "titulo": "Una alternativa definida para quienes no entran",
+  "explicacion": "Los formatos reducidos necesitan, desde antes del evento, una propuesta para los medios que no pueden participar.",
+  "recomendacion": "Definir de antemano una oferta para no convocados: test drives posteriores, desayunos o encuentros individuales, material exclusivo y entrevistas con voceros."
+ },
+ {
+  "letra": "D",
+  "area": "Alineación de mensajes",
+  "titulo": "Alinear antes de responder",
+  "explicacion": "El feedback interno permitió unificar mensajes y criterios antes de conversar con los periodistas disconformes.",
+  "recomendacion": "Ante situaciones sensibles con periodistas, hacer una instancia de alineación entre agencia, cliente y voceros antes de responder."
+ },
+ {
+  "letra": "E",
+  "area": "Medición y seguimiento",
+  "titulo": "Medir la cobertura en el tiempo",
+  "explicacion": "La grilla al día permitió ver en horas cómo el volumen inicial empezó a convertirse en notas web.",
+  "recomendacion": "Mantener la grilla de clipping actualizada y este seguimiento después de cada lanzamiento, con cortes a los 7, 15 y 30 días."
+ }
+]

@@ -1426,5 +1426,33 @@
   "voceria": "Sin Vocería",
   "tier": "Tier 3",
   "reputacion": "Positivo"
+ },
+ {
+  "fila": "4725",
+  "marca": "FIAT",
+  "fecha": "11/11/2026",
+  "titulo": "Un ícono que se renueva. Fiat presentó en Chile a la última generación del 600",
+  "medio": "AWD Chile",
+  "tipo_medio": "Instagram",
+  "link": "https://www.instagram.com/p/Dfmu51zEeEZ/",
+  "campana": "LANZAMIENTO FIAT 600",
+  "gestion": "ALTA / Earned Media",
+  "voceria": "Sin Vocería",
+  "tier": "Tier 2",
+  "reputacion": "Neutro"
+ },
+ {
+  "fila": "4726",
+  "marca": "FIAT",
+  "fecha": "11/11/2026",
+  "titulo": "Un ícono que se renueva. Fiat presentó en Chile a la última generación del 600",
+  "medio": "AWD Chile",
+  "tipo_medio": "Facebook",
+  "link": "https://www.facebook.com/awdchile/posts/pfbid026fVtP3gnTR2kGvtjKCQTstVxxaDN3UeapH6EXSz4gLXj2eH32Ej2fgyzsU7UwpR9l",
+  "campana": "LANZAMIENTO FIAT 600",
+  "gestion": "ALTA / Earned Media",
+  "voceria": "Sin Vocería",
+  "tier": "Tier 2",
+  "reputacion": "Neutro"
  }
 ]

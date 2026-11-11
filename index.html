@@ -214,6 +214,33 @@ window.dash = (() => {
 .f6-mailev { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 13px; }
 .f6-mailev li { display: grid; grid-template-columns: 54px 92px 1fr; gap: 8px; }
 .f6-mailev .t { color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.f6-visual { grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); }
+.f6-visual .f6-chart { min-height: 150px; }
+.f6-hz { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--cds-gap-md); }
+.f6-hz article { background: var(--color-panel); border: 1px solid var(--color-border-line); border-top: 3px solid var(--f6-red); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: 6px; align-content: start; }
+.f6-hz .big { font-family: var(--font-anthropic-serif); font-size: 40px; line-height: 1; color: var(--f6-red); font-variant-numeric: tabular-nums; }
+.f6-hz .cap { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); text-transform: uppercase; letter-spacing: .05em; }
+.f6-hz h4 { margin: 6px 0 0; font-size: var(--cds-font-size-heading); line-height: 1.3; }
+.f6-hz p { margin: 0; color: var(--color-fg-muted); line-height: 1.45; }
+.f6-concl { background: #141414; color: #f4f4f4; border-radius: var(--cds-radius); padding: var(--cds-pad-xl); display: grid; gap: var(--cds-gap-sm); border-left: 4px solid var(--f6-red); }
+.f6-concl .f6-kicker { color: #ff5a6a; }
+.f6-concl p { margin: 0; font-family: var(--font-anthropic-serif); font-size: 19px; line-height: 1.5; max-width: 80ch; }
+.f6-learn { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--cds-gap-md); }
+.f6-lcard { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: 10px; align-content: start; }
+.f6-lcard .lt { display: flex; gap: 10px; align-items: center; }
+.f6-lcard .lt b { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--f6-red); color: #fff; font-family: var(--font-anthropic-serif); font-size: 18px; font-weight: 400; flex: none; }
+.f6-lcard .lt span { font-size: var(--cds-font-size-caption); text-transform: uppercase; letter-spacing: .06em; color: var(--color-fg-muted); }
+.f6-lcard h4 { margin: 0; font-size: var(--cds-font-size-heading); line-height: 1.3; }
+.f6-lcard p { margin: 0; line-height: 1.5; color: var(--color-fg-muted); }
+.f6-lcard .rec { border-left: 3px solid var(--f6-red); padding-left: 10px; color: var(--color-fg); }
+.f6-lcard .rec::before { content: "Recomendación"; display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--f6-red); font-weight: var(--cds-font-weight-medium); margin-bottom: 2px; }
+.f6-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: st; }
+.f6-steps li { display: grid; grid-template-columns: 28px 1fr; gap: 2px 10px; align-items: start; counter-increment: st; }
+.f6-steps li::before { content: counter(st); grid-row: span 2; display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid var(--color-border-line); font-size: 12px; color: var(--color-fg-muted); }
+.f6-steps li.done::before { content: "✓"; background: var(--color-ok); border-color: var(--color-ok); color: #fff; }
+.f6-steps li.now::before { border-color: var(--f6-red); color: var(--f6-red); font-weight: 700; }
+.f6-steps li span { font-size: 13px; color: var(--color-fg-muted); }
+.f6-h4 { margin: 0; font-size: 15px; font-weight: var(--cds-font-weight-medium); }
 [data-dash-source-state=refreshing] { opacity: .5; }
 </style>
 
@@ -235,60 +262,44 @@ window.dash = (() => {
     <button class="f6-tab" role="tab" data-tab="mensajes" aria-selected="false">Message Tracking</button>
     <button class="f6-tab" role="tab" data-tab="contenidos" aria-selected="false">Contenidos</button>
     <button class="f6-tab" role="tab" data-tab="medios" aria-selected="false">Media Relationship Tracker</button>
-    <button class="f6-tab" role="tab" data-tab="proximos" aria-selected="false">Next Steps</button>
+    <button class="f6-tab" role="tab" data-tab="learnings" aria-selected="false">LEARNINGS</button>
   </nav>
 
   <!-- A. RESUMEN EJECUTIVO -->
   <section class="f6-sec" id="resumen" data-panel="resumen">
     <header>
       <p class="f6-kicker">Resumen ejecutivo</p>
-      <h2>El lanzamiento en un minuto</h2>
-      <p class="f6-sub">Evento íntimo en Hilaria, martes 10 de noviembre a las 14:00, con Fito Rayo y su FIAT 600 de 1969. Las cifras de prensa salen de la grilla de clipping; solo cuentan publicaciones desde el 10/11 y cada pieza se cuenta una vez. <span class="f6-upd" id="f6-upd">Cargando datos…</span></p>
-      <div class="f6-legend"><span><span class="f6-ver ok">Verificado</span> dato con fuente confirmada</span><span><span class="f6-ver pend">Por validar</span> pendiente de confirmación, no usar como dato final</span></div>
+      <h2>Radiografía del lanzamiento</h2>
+      <p class="f6-sub">Evento íntimo en Hilaria, 10 de noviembre de 2026. Cifras desde el día del evento; cada publicación se cuenta una vez. <span class="f6-upd" id="f6-upd">Cargando datos…</span></p>
     </header>
 
     <div class="f6-kpis" id="kpis">
-      <div class="f6-kpi big"><span class="n" data-draw="k_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</span><span class="l">Publicaciones únicas del evento</span><span class="d"><span data-draw="k_perm" data-source="kpis" data-field="permanentes" data-row="0">—</span> permanentes (notas web, posts, reels) y <span data-draw="k_hist" data-source="kpis" data-field="historias" data-row="0">—</span> historias de 24 horas</span></div>
-      <div class="f6-kpi big"><span class="n"><span data-draw="k_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</span><small> / <span data-draw="k_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</span></small></span><span class="l">Medios invitados con cobertura</span><span class="d"><span data-draw="k_medcanal" data-source="conv" data-field="medios_canal" data-row="0">—</span> en canales del medio y <span data-draw="k_medpers" data-source="conv" data-field="medios_solo_personal" data-row="0">—</span> solo en cuentas personales de periodistas</span></div>
-      <div class="f6-kpi big"><span class="n"><span data-draw="k_asist" data-source="conv" data-field="asistieron" data-row="0">—</span><small> / <span data-draw="k_invit" data-source="conv" data-field="periodistas_invitados" data-row="0">—</span></small></span><span class="l">Asistencia de periodistas invitados</span><span class="d"><span class="f6-ver ok">Verificado</span> Todos los invitados asistieron (confirmado por ALTA)</span></div>
-      <div class="f6-kpi big"><span class="n"><span data-draw="k_pos" data-source="kpis" data-field="pct_positivo" data-row="0">—</span><small>%</small></span><span class="l">Tono positivo del clipping</span><span class="d">Clasificación de la grilla sobre <span data-draw="k_res" data-source="kpis" data-field="registros_resultado" data-row="0">—</span> registros de medios y cuentas. No es la opinión del público.</span></div>
-      <div class="f6-kpi big"><span class="n"><span data-draw="k_sneg" data-source="soc_resumen" data-field="negativos">—</span><small> / <span data-draw="k_sn" data-source="soc_resumen" data-field="comentarios">—</span></small></span><span class="l">Comentarios negativos del público</span><span class="d">En posts del lanzamiento, sobre todo por precio y posventa. Muestra pequeña, revisada a mano.</span></div>
+      <div class="f6-kpi big"><span class="n" data-draw="k_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</span><span class="l">Publicaciones únicas</span><span class="d"><span data-draw="k_perm" data-source="kpis" data-field="permanentes" data-row="0">—</span> permanentes · <span data-draw="k_hist" data-source="kpis" data-field="historias" data-row="0">—</span> historias</span></div>
+      <div class="f6-kpi big"><span class="n" data-draw="k_cuentas" data-source="kpis" data-field="cuentas" data-row="0">—</span><span class="l">Medios y cuentas con cobertura</span><span class="d"><span data-draw="k_web" data-source="kpis" data-field="notas_web" data-row="0">—</span> notas web</span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</span><small> / <span data-draw="k_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</span></small></span><span class="l">Medios invitados con cobertura</span><span class="d">Sin cobertura: <span data-draw="k_sin" data-source="conv" data-field="lista_sin" data-row="0">—</span></span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_asist" data-source="conv" data-field="asistieron" data-row="0">—</span><small> / <span data-draw="k_invit" data-source="conv" data-field="periodistas_invitados" data-row="0">—</span></small></span><span class="l">Asistencia de invitados</span><span class="d">Convocatoria completa</span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_pos" data-source="kpis" data-field="pct_positivo" data-row="0">—</span><small>%</small></span><span class="l">Tono positivo del clipping</span><span class="d">Publicaciones de medios y cuentas</span></div>
     </div>
 
-    <div class="f6-answers" id="lectura">
-      <article class="f6-ans">
-        <p class="q"><b>1</b>¿Cómo resultó el lanzamiento?</p>
-        <p>Convocatoria completa: asistieron los <b data-draw="a_asist" data-source="conv" data-field="asistieron" data-row="0">—</b> periodistas invitados y <b data-draw="a_perpub" data-source="conv" data-field="periodistas_publicaron" data-row="0">—</b> publicaron el mismo día. El reconocimiento a Fito Rayo y el legado del 600 le dieron a la prensa una historia propia.</p>
-      </article>
-      <article class="f6-ans">
-        <p class="q"><b>2</b>¿Qué conseguimos en prensa?</p>
-        <p><b data-draw="a_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</b> publicaciones únicas en <b data-draw="a_cuentas" data-source="kpis" data-field="cuentas" data-row="0">—</b> medios y cuentas, <b data-draw="a_web" data-source="kpis" data-field="notas_web" data-row="0">—</b> de ellas notas web. La cobertura es alta en volumen, pero se concentra en historias de Instagram que duran 24 horas.</p>
-      </article>
-      <article class="f6-ans">
-        <p class="q"><b>3</b>¿Qué conversación generamos?</p>
-        <p>En los posts del lanzamiento, el público dejó <b data-draw="a_sn" data-source="soc_resumen" data-field="comentarios">—</b> comentarios: <b data-draw="a_sneg" data-source="soc_resumen" data-field="negativos">—</b> negativos y <b data-draw="a_spos" data-source="soc_resumen" data-field="positivos">—</b> positivos. Pesan el precio y la posventa más que el diseño; los elogios van al diseño y al legado.</p>
-      </article>
-      <article class="f6-ans">
-        <p class="q"><b>4</b>¿Cuáles son los principales riesgos?</p>
-        <ol data-draw="a_riesgos" data-source="riesgos"></ol>
-      </article>
-      <article class="f6-ans">
-        <p class="q"><b>5</b>¿Qué debemos hacer ahora?</p>
-        <ol data-draw="a_acciones" data-source="plan"></ol>
-      </article>
+    <div class="f6-grid2 f6-visual" id="radiografia">
+      <div class="f6-card"><header><h3>Cobertura por día</h3><div class="f6-legend"><span><i style="background:var(--cds-chart-muted)"></i>Previa</span><span><i style="background:var(--f6-red)"></i>Día del lanzamiento</span><span><i style="background:#e8838f"></i>Posterior</span></div></header><div class="f6-chart" data-draw="r_fecha" data-source="lanz"></div></div>
+      <div class="f6-card"><header><h3>Formato</h3><div class="f6-legend"><span><i style="background:var(--f6-red)"></i>Permanente</span><span><i style="background:var(--cds-chart-muted)"></i>Historia de 24 horas</span></div></header><div class="f6-chart" data-draw="r_formato" data-source="lanz"></div></div>
+      <div class="f6-card"><header><h3>Mensajes más instalados</h3><p class="f6-note">Registros que contienen cada mensaje</p></header><div class="f6-chart" data-draw="r_msgs" data-source="mensajes"></div></div>
+      <div class="f6-card"><header><h3>Tono de medios vs. público</h3><div class="f6-legend"><span><i style="background:var(--color-ok)"></i>Positivo</span><span><i style="background:var(--cds-chart-muted)"></i>Neutro</span><span><i style="background:var(--color-bad)"></i>Negativo</span></div></header><div class="f6-chart" data-draw="r_tono" data-source="soc_resumen"></div></div>
     </div>
 
-    <div class="f6-sec" id="insights-principales">
-      <header>
-        <h3>Cinco insights estratégicos</h3>
-        <p class="f6-sub">Cada insight separa la evidencia (dato verificable) de la interpretación (lectura de ALTA) y termina en una acción.</p>
-      </header>
-      <div class="f6-insights" data-draw="ins_top" data-source="insights"></div>
+    <div class="f6-sec" id="hallazgos">
+      <h3>Tres hallazgos</h3>
+      <div class="f6-hz">
+        <article><span class="big" data-draw="hz1" data-source="mensajes">—</span><span class="cap">registros con el mensaje de legado</span><h4>El legado del 600 y Fito Rayo, el ángulo más replicado</h4><p>El 600 de 1969 junto al nuevo Hybrid le dio a la prensa una historia propia.</p></article>
+        <article><span class="big" data-draw="hz2" data-source="conv">—</span><span class="cap">medios invitados con cobertura</span><h4>Convocatoria completa y respuesta rápida</h4><p>Asistieron todos los invitados y casi todos publicaron el mismo día.</p></article>
+        <article><span class="big" data-draw="hz3" data-source="kpis">—</span><span class="cap">piezas permanentes</span><h4>La web crece, pero dominan las historias</h4><p>Los test drives deben sumar notas que permanezcan en el tiempo.</p></article>
+      </div>
     </div>
 
-    <div class="f6-card" id="riesgos">
-      <header><h3>Mapa de riesgos</h3><p class="f6-note">Ordenados por nivel. Los riesgos con borde punteado dependen de un dato por validar.</p></header>
-      <div class="f6-risks" data-draw="risklist" data-source="riesgos"></div>
+    <div class="f6-concl" id="conclusion">
+      <p class="f6-kicker">Conclusión</p>
+      <p>El FIAT 600 Hybrid tuvo un lanzamiento de alto impacto en redes, con convocatoria completa y tono muy positivo. El siguiente paso es convertir ese volumen en cobertura permanente con test drives y entrevistas, y fortalecer la relación con los medios que no participaron.</p>
     </div>
   </section>
 
@@ -565,6 +576,7 @@ window.dash = (() => {
           <option value="">Todas</option>
           <option value="Invitado">Invitados</option>
           <option value="Invitado especial">Invitado especial</option>
+          <option value="No invitado">No invitados</option>
           <option value="Prensa previa">Prensa previa</option>
         </select>
       </label>
@@ -586,49 +598,69 @@ window.dash = (() => {
     </div>
     <div class="f6-tablewrap" id="tracker">
       <table data-source="seguimiento" data-row-key="id" aria-label="Seguimiento de medios">
-        <thead><tr><th data-field="periodista">Periodista</th><th data-field="medio">Medio</th><th data-field="tipo">Relación</th><th data-field="asistio">Asistió</th><th data-field="estado">Estado</th><th data-field="cobertura">Cobertura</th><th class="num" data-field="publicaciones">Registros</th><th data-field="verificacion">Dato</th></tr></thead>
+        <thead><tr><th data-field="periodista">Periodista</th><th data-field="medio">Medio</th><th data-field="tipo">Relación</th><th data-field="asistio">Asistió</th><th data-field="estado">Estado</th><th data-field="responsable">Responsable</th><th data-field="cobertura">Cobertura</th><th class="num" data-field="publicaciones">Registros</th><th data-field="verificacion">Dato</th></tr></thead>
         <tbody data-draw="tracker"></tbody>
       </table>
     </div>
     <div class="f6-grid2">
+      <div class="f6-card" id="no-invitados">
+        <header><h3>Relacionamiento con medios no convocados</h3><p class="f6-note">Gestión preventiva para fortalecer la relación con la prensa.</p></header>
+        <p class="f6-sub">Algunos periodistas que no pudieron participar del formato reducido manifestaron su disconformidad. El tema está en etapa de gestión y seguimiento.</p>
+        <ol class="f6-steps">
+          <li class="done"><b>Feedback interno realizado</b><span>Mensajes y criterios de respuesta alineados en el equipo.</span></li>
+          <li class="now"><b>Conversaciones directas</b><span>A cargo de Constanza Graham.</span></li>
+          <li><b>Seguimiento caso a caso</b><span>Ofrecimiento de test drive o material exclusivo, y registro en este tracker.</span></li>
+        </ol>
+      </div>
     </div>
   </section>
 
-  <!-- G. NEXT STEPS -->
-  <section class="f6-sec" id="proximos" data-panel="proximos" hidden>
+  <!-- G. LEARNINGS -->
+  <section class="f6-sec" id="learnings" data-panel="learnings" hidden>
     <header>
-      <p class="f6-kicker">Next Steps</p>
-      <h2>Próximos 15 días</h2>
-      <p class="f6-sub">Calendario del 11 al 25 de noviembre. La prioridad combina impacto esperado, facilidad y relevancia para los objetivos de Fiat.</p>
+      <p class="f6-kicker">Learnings</p>
+      <h2>LEARNINGS</h2>
+      <p class="f6-sub">Lo que deja la organización y ejecución del lanzamiento. Son recomendaciones de ALTA para próximos eventos, no acuerdos aprobados por Stellantis.</p>
     </header>
+    <div class="f6-learn" data-draw="learnings" data-source="learnings"></div>
+
+    <div class="f6-sec" id="proximas-acciones">
+      <header><h3>Próximas acciones</h3><p class="f6-note">Del 11 al 25 de noviembre.</p></header>
     <div class="f6-filters" id="filtros-plan">
-      <label for="f-pprio">Prioridad
-        <select class="dash-select" id="f-pprio" aria-label="Prioridad">
-          <option value="">Todas</option>
-          <option value="Alta">Alta</option>
-          <option value="Media">Media</option>
-        </select>
-      </label>
-      <label for="f-ptipo">Tipo
-        <select class="dash-select" id="f-ptipo" data-draw="sel_ptipo" data-source="plan" aria-label="Tipo"></select>
-      </label>
-      <label for="f-presp">Responsable
-        <select class="dash-select" id="f-presp" data-draw="sel_presp" data-source="plan" aria-label="Responsable"></select>
-      </label>
+        <label for="f-pprio">Prioridad
+          <select class="dash-select" id="f-pprio" aria-label="Prioridad">
+            <option value="">Todas</option>
+            <option value="Alta">Alta</option>
+            <option value="Media">Media</option>
+          </select>
+        </label>
+        <label for="f-ptipo">Tipo
+          <select class="dash-select" id="f-ptipo" data-draw="sel_ptipo" data-source="plan" aria-label="Tipo"></select>
+        </label>
+        <label for="f-presp">Responsable
+          <select class="dash-select" id="f-presp" data-draw="sel_presp" data-source="plan" aria-label="Responsable"></select>
+        </label>
+      </div>
+      <div class="f6-card" id="calendario-visual">
+        <header><h4 class="f6-h4">Calendario</h4><div class="f6-legend"><span><i style="background:var(--f6-red)"></i>Prioridad alta</span><span><i style="background:var(--color-warn)"></i>Prioridad media</span></div></header>
+        <div class="f6-cal" data-draw="calendar" data-source="plan"></div>
+      </div>
+      <div class="f6-tablewrap" id="calendario">
+        <table data-source="plan" data-row-key="accion" aria-label="Plan de acciones">
+          <thead><tr><th data-field="fecha">Fecha</th><th data-field="accion">Acción</th><th data-field="tipo">Tipo</th><th data-field="prioridad">Prioridad</th><th data-field="impacto">Impacto</th><th data-field="facilidad">Facilidad</th><th data-field="responsable">Responsable</th></tr></thead>
+          <tbody data-draw="plantable"></tbody>
+        </table>
+      </div>
     </div>
-    <div class="f6-card" id="calendario-visual">
-      <header><h3>Calendario</h3><div class="f6-legend"><span><i style="background:var(--f6-red)"></i>Prioridad alta</span><span><i style="background:var(--color-warn)"></i>Prioridad media</span></div></header>
-      <div class="f6-cal" data-draw="calendar" data-source="plan"></div>
-    </div>
-    <div class="f6-tablewrap" id="calendario">
-      <table data-source="plan" data-row-key="accion" aria-label="Plan de acciones">
-        <thead><tr><th data-field="fecha">Fecha</th><th data-field="accion">Acción</th><th data-field="tipo">Tipo</th><th data-field="prioridad">Prioridad</th><th data-field="impacto">Impacto</th><th data-field="facilidad">Facilidad</th><th data-field="responsable">Responsable</th></tr></thead>
-        <tbody data-draw="plantable"></tbody>
-      </table>
-    </div>
-    <div class="f6-sec" id="mas-hallazgos">
-      <h3>Otros hallazgos y recomendaciones</h3>
+
+    <div class="f6-sec" id="hallazgos-detalle">
+      <header><h3>Hallazgos del análisis</h3><p class="f6-note">Cada hallazgo separa la evidencia de la interpretación y termina en una acción.</p><div class="f6-legend"><span><span class="f6-ver ok">Verificado</span> dato con fuente confirmada</span><span><span class="f6-ver pend">Por validar</span> pendiente de confirmación</span></div></header>
+      <div class="f6-insights" data-draw="ins_top" data-source="insights"></div>
       <div class="f6-insights" data-draw="ins_more" data-source="insights"></div>
+      <div class="f6-card" id="riesgos">
+        <header><h3>Riesgos y temas a cuidar</h3></header>
+        <div class="f6-risks" data-draw="risklist" data-source="riesgos"></div>
+      </div>
     </div>
     <div class="f6-grid2">
       <div class="f6-card" id="pendientes">
@@ -738,7 +770,7 @@ dash.calc('seguimiento', {
       const nCre = hits.filter((p) => p.canal === 'Creador').length;
       const estado = hits.length ? 'PUBLICADO' : c.estado_base;
       const cobertura = !hits.length ? '—' : nCre ? 'Cuenta propia (creador)' : nMedio && nPers ? 'Medio y cuenta personal' : nMedio ? 'Canal del medio' : 'Solo cuenta personal';
-      return { id: c.id, periodista: c.periodista, medio: c.medio, medio_padre: c.medio_padre || '', tipo: c.tipo, asistio: c.asistio || '—', estado, cobertura, publicaciones: hits.length, en_medio: nMedio, en_personal: nPers, respuesta: c.respuesta, ultimo_contacto: c.ultimo_contacto, oportunidad: c.oportunidad, proxima_accion: c.proxima_accion, fuente: c.fuente, verificacion: c.verificacion || 'Verificado' };
+      return { id: c.id, periodista: c.periodista, medio: c.medio, medio_padre: c.medio_padre || '', tipo: c.tipo, asistio: c.asistio || '—', responsable: c.responsable || 'Equipo ALTA', estado, cobertura, publicaciones: hits.length, en_medio: nMedio, en_personal: nPers, respuesta: c.respuesta, ultimo_contacto: c.ultimo_contacto, oportunidad: c.oportunidad, proxima_accion: c.proxima_accion, fuente: c.fuente, verificacion: c.verificacion || 'Verificado' };
     });
   }
 });
@@ -935,28 +967,12 @@ const f6num = (name, src, field, row) => dash.draw(name, (el) => {
   const r = Array.isArray(s.data) ? (row ? s.data.find(row) : s.data[0]) : null;
   el.textContent = r ? (typeof r[field] === 'number' ? f6fmt(r[field]) : String(r[field] ?? '—')) : (Array.isArray(s.data) ? '—' : f6fmt(s.data));
 });
-[['h_asist','asistieron'],['h_invit','periodistas_invitados'],['h_medcob','medios_cobertura'],['h_medinv','medios_invitados'],['k_medcob','medios_cobertura'],['k_medinv','medios_invitados'],['k_medcanal','medios_canal'],['k_medpers','medios_solo_personal'],['k_asist','asistieron'],['k_invit','periodistas_invitados'],['a_asist','asistieron'],['a_perpub','periodistas_publicaron'],['r_medcob','medios_cobertura'],['r_medinv','medios_invitados'],['r_medcanal','medios_canal'],['r_medpers','medios_solo_personal'],['r_lista_pers','lista_solo_personal'],['r_lista_sin','lista_sin'],['r_perpub','periodistas_publicaron'],['r_perinv','asistieron'],['r_contpub','publicados'],['r_esp','especiales_publicados'],['k_pub','publicados'],['k_seg','en_seguimiento'],['k_pend','pendientes']].forEach(([n, f]) => f6num(n, 'conv', f));
-[['h_unicas','publicaciones_unicas'],['h_pos','pct_positivo'],['k_unicas','publicaciones_unicas'],['k_perm','permanentes'],['k_hist','historias'],['k_pos','pct_positivo'],['k_res','registros_resultado'],['a_unicas','publicaciones_unicas'],['a_cuentas','cuentas'],['a_web','notas_web']].forEach(([n, f]) => f6num(n, 'kpis', f));
+[['k_sin','lista_sin'],['h_asist','asistieron'],['h_invit','periodistas_invitados'],['h_medcob','medios_cobertura'],['h_medinv','medios_invitados'],['k_medcob','medios_cobertura'],['k_medinv','medios_invitados'],['k_medcanal','medios_canal'],['k_medpers','medios_solo_personal'],['k_asist','asistieron'],['k_invit','periodistas_invitados'],['a_asist','asistieron'],['a_perpub','periodistas_publicaron'],['r_medcob','medios_cobertura'],['r_medinv','medios_invitados'],['r_medcanal','medios_canal'],['r_medpers','medios_solo_personal'],['r_lista_pers','lista_solo_personal'],['r_lista_sin','lista_sin'],['r_perpub','periodistas_publicaron'],['r_perinv','asistieron'],['r_contpub','publicados'],['r_esp','especiales_publicados'],['k_pub','publicados'],['k_seg','en_seguimiento'],['k_pend','pendientes']].forEach(([n, f]) => f6num(n, 'conv', f));
+[['k_cuentas','cuentas'],['k_web','notas_web'],['h_unicas','publicaciones_unicas'],['h_pos','pct_positivo'],['k_unicas','publicaciones_unicas'],['k_perm','permanentes'],['k_hist','historias'],['k_pos','pct_positivo'],['k_res','registros_resultado'],['a_unicas','publicaciones_unicas'],['a_cuentas','cuentas'],['a_web','notas_web']].forEach(([n, f]) => f6num(n, 'kpis', f));
 const lanzRow = (r) => r.fase === 'Lanzamiento';
 [['k_sneg','negativos'],['k_sn','comentarios'],['a_sn','comentarios'],['a_sneg','negativos'],['a_spos','positivos']].forEach(([n, f]) => f6num(n, 'soc_resumen', f, lanzRow));
 
 // ---------- Resumen ----------
-dash.draw('a_riesgos', (ol) => {
-  const s = dash.data('riesgos'); ol.replaceChildren(); if (s.status !== 'ok') return;
-  s.data.slice().sort((a, b) => +a.orden - +b.orden).slice(0, 3).forEach((r) => {
-    const li = f6el('li'); li.append(f6el('b', '', r.riesgo + '. '), document.createTextNode(r.accion + ' '));
-    if (r.verificacion === 'Por validar') li.appendChild(f6ver('Por validar'));
-    ol.appendChild(li);
-  });
-});
-dash.draw('a_acciones', (ol) => {
-  const s = dash.data('plan'); ol.replaceChildren(); if (s.status !== 'ok') return;
-  const fmt = d3.utcFormat('%d/%m');
-  s.data.filter((r) => r.prioridad === 'Alta').sort((a, b) => d3.ascending(a.fecha, b.fecha)).slice(0, 3).forEach((r) => {
-    const li = f6el('li'); li.append(f6el('b', '', fmt(new Date(r.fecha + 'T00:00:00Z')) + ' · '), document.createTextNode(r.accion));
-    ol.appendChild(li);
-  });
-});
 const f6ins = (name, top) => dash.draw(name, (el) => {
   const s = dash.data('insights');
   if (f6status(el, s)) return;
@@ -1035,10 +1051,9 @@ dash.draw('chart_rep', (el) => {
   const rows = Array.from(d3.rollup(f6prensa(s.data), (v) => v.length, (p) => p.reputacion), ([reputacion, n]) => ({ reputacion, registros: n })).sort((a, b) => b.registros - a.registros);
   f6hbar(el, rows, 'reputacion', 'registros', { label: 'Registros por tono del clipping', unit: 'registros', color: (d) => F6SENT[d.reputacion] || 'var(--cds-chart-muted)' });
 });
-dash.draw('chart_fecha', (el) => {
-  const s = dash.data('lanz'); if (f6status(el, s)) return;
+window.f6fechaChart = (el, src) => {
   el.replaceChildren();
-  const rows = Array.from(d3.rollup(f6prensa(s.data, { allFases: true }), (v) => ({ n: v.length, fase: v[0].fase }), (p) => p.fecha_iso), ([fecha_iso, v]) => ({ fecha_iso, fase: v.fase, registros: v.n })).filter((r) => r.fecha_iso).sort((a, b) => d3.ascending(a.fecha_iso, b.fecha_iso));
+  const rows = Array.from(d3.rollup(src, (v) => ({ n: v.length, fase: v[0].fase }), (p) => p.fecha_iso), ([fecha_iso, v]) => ({ fecha_iso, fase: v.fase, registros: v.n })).filter((r) => r.fecha_iso).sort((a, b) => d3.ascending(a.fecha_iso, b.fecha_iso));
   if (!rows.length) { el.appendChild(f6el('p', 'f6-note', 'Sin datos con estos filtros.')); return; }
   const tip = f6el('div', 'f6-tip'); tip.hidden = true;
   const W = Math.max(260, el.clientWidth || 300), H = 210, m = { t: 20, r: 8, b: 26, l: 30 };
@@ -1056,7 +1071,9 @@ dash.draw('chart_fecha', (el) => {
     .on('pointerleave', () => { tip.hidden = true; });
   svg.selectAll('text.v').data(rows).join('text').attr('class', 'val v').attr('x', (d) => x(d.fecha_iso) + x.bandwidth() / 2).attr('y', (d) => y(d.registros) - 5).attr('text-anchor', 'middle').text((d) => d.registros);
   el.appendChild(tip);
-});
+};
+dash.draw('chart_fecha', (el) => { const s = dash.data('lanz'); if (f6status(el, s)) return; f6fechaChart(el, f6prensa(s.data, { allFases: true })); });
+dash.draw('r_fecha', (el) => { const s = dash.data('lanz'); if (f6status(el, s)) return; f6fechaChart(el, s.data.filter((p) => p.repetida === 'No')); });
 const f6opts = (sel, values, cur, all) => { sel.replaceChildren(new Option(all, ''), ...values.map((v) => new Option(v, v))); sel.value = values.includes(cur) ? cur : ''; };
 dash.draw('sel_formato', (sel) => { const s = dash.data('lanz'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(s.data.map((r) => r.formato))).sort() : [], f6.formato, 'Todos'); });
 dash.draw('sel_tier', (sel) => { const s = dash.data('lanz'); f6opts(sel, s.status === 'ok' ? Array.from(new Set(s.data.map((r) => r.tier))).sort() : [], f6.tier, 'Todos'); });
@@ -1132,16 +1149,44 @@ dash.draw('soc_lista', (ul) => {
   });
   if (!rows.length) ul.appendChild(f6el('li', 'f6-note', 'Sin comentarios con estos filtros.'));
 });
-dash.draw('chart_termometros', (el) => {
+window.f6termo = (el, short) => {
   const s = dash.data('soc_resumen'); const k = dash.data('lanz');
   if (f6status(el, s)) return; if (k.status !== 'ok') { el.textContent = '—'; return; }
   const res = k.data.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
   const pub = s.data.find((r) => r.fase === 'Lanzamiento') || { positivos: 0, neutros: 0, negativos: 0, comentarios: 0 };
   const rows = [
-    { nombre: 'Tono del clipping (medios y cuentas)', Positivo: res.filter((p) => p.reputacion === 'Positivo').length, Neutro: res.filter((p) => p.reputacion !== 'Positivo' && p.reputacion !== 'Negativo').length, Negativo: res.filter((p) => p.reputacion === 'Negativo').length },
-    { nombre: 'Sentimiento del público (comentarios)', Positivo: pub.positivos, Neutro: pub.neutros, Negativo: pub.negativos }
+    { nombre: short ? 'Medios (clipping)' : 'Tono del clipping (medios y cuentas)', Positivo: res.filter((p) => p.reputacion === 'Positivo').length, Neutro: res.filter((p) => p.reputacion !== 'Positivo' && p.reputacion !== 'Negativo').length, Negativo: res.filter((p) => p.reputacion === 'Negativo').length },
+    { nombre: short ? 'Público (comentarios)' : 'Sentimiento del público (comentarios)', Positivo: pub.positivos, Neutro: pub.neutros, Negativo: pub.negativos }
   ].map((r) => { const t = r.Positivo + r.Neutro + r.Negativo || 1; return { nombre: r.nombre, n: t, Positivo: r.Positivo / t * 100, Neutro: r.Neutro / t * 100, Negativo: r.Negativo / t * 100 }; });
-  f6hbar(el, rows, 'nombre', 'n', { label: 'Tono del clipping frente al sentimiento del público, en porcentaje', bh: 26, max: 100, segs: [{ key: 'Positivo', color: 'var(--color-ok)', label: '% positivo' }, { key: 'Neutro', color: 'var(--cds-chart-muted)', label: '% neutro' }, { key: 'Negativo', color: 'var(--color-bad)', label: '% negativo' }], fmtVal: (d) => `${Math.round(d.Positivo)}% pos. · ${Math.round(d.Negativo)}% neg. (n=${d.n})` });
+  f6hbar(el, rows, 'nombre', 'n', { label: 'Tono del clipping frente al sentimiento del público, en porcentaje', bh: 26, max: 100, segs: [{ key: 'Positivo', color: 'var(--color-ok)', label: '% positivo' }, { key: 'Neutro', color: 'var(--cds-chart-muted)', label: '% neutro' }, { key: 'Negativo', color: 'var(--color-bad)', label: '% negativo' }], fmtVal: (d) => short ? `${Math.round(d.Positivo)}% · ${Math.round(d.Negativo)}%` : `${Math.round(d.Positivo)}% pos. · ${Math.round(d.Negativo)}% neg. (n=${d.n})` });
+};
+dash.draw('chart_termometros', (el) => f6termo(el, false));
+
+// ---------- Radiografía (resumen) ----------
+dash.draw('r_tono', (el) => f6termo(el, true));
+dash.draw('r_formato', (el) => {
+  const s = dash.data('lanz'); if (f6status(el, s)) return;
+  const r = s.data.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+  const nom = { 'Historia IG': 'Historias de Instagram', 'Post IG': 'Posts de Instagram', 'Nota web': 'Notas web', 'Facebook': 'Facebook', 'Reel': 'Reels', 'Video YouTube': 'Video YouTube' };
+  const rows = Array.from(d3.rollup(r, (v) => new Set(v.map((p) => p.clave)).size, (p) => p.formato), ([formato, n]) => ({ formato, nombre: nom[formato] || formato, n, efimero: formato === 'Historia IG' })).sort((a, b) => b.n - a.n);
+  f6hbar(el, rows, 'nombre', 'n', { label: 'Publicaciones únicas por formato', unit: 'publicaciones', color: (d) => d.efimero ? 'var(--cds-chart-muted)' : 'var(--f6-red)' });
+});
+dash.draw('r_msgs', (el) => {
+  const s = dash.data('mensajes'); if (f6status(el, s)) return;
+  const rows = s.data.filter((m) => m.registros > 0).sort((a, b) => b.registros - a.registros).slice(0, 5);
+  f6hbar(el, rows, 'mensaje', 'registros', { label: 'Mensajes con más registros', unit: 'registros', color: () => 'var(--f6-red)' });
+});
+dash.draw('hz1', (el) => { const s = dash.data('mensajes'); const m = s.status === 'ok' ? s.data.find((x) => /legado/i.test(x.mensaje)) : null; el.textContent = m ? f6fmt(m.registros) : '—'; });
+dash.draw('hz2', (el) => { const s = dash.data('conv'); el.textContent = s.status === 'ok' ? `${s.data[0].medios_cobertura}/${s.data[0].medios_invitados}` : '—'; });
+dash.draw('hz3', (el) => { const s = dash.data('kpis'); el.textContent = s.status === 'ok' ? `${f6fmt(s.data[0].permanentes)} de ${f6fmt(s.data[0].publicaciones_unicas)}` : '—'; });
+dash.draw('learnings', (el) => {
+  const s = dash.data('learnings'); if (f6status(el, s)) return;
+  el.replaceChildren(...s.data.map((r) => {
+    const a = f6el('article', 'f6-lcard');
+    const t = f6el('div', 'lt'); t.append(f6el('b', '', r.letra), f6el('span', '', r.area));
+    a.append(t, f6el('h4', '', r.titulo), f6el('p', '', r.explicacion), f6el('p', 'rec', r.recomendacion));
+    return a;
+  }));
 });
 
 // ---------- Message Tracking ----------
@@ -1226,11 +1271,12 @@ dash.draw('tracker', (tb) => {
     const tr = f6el('tr'); tr.dataset.key = r.id; if (r.verificacion === 'Por validar') tr.className = 'pend';
     f6cell(tr, r.periodista); f6cell(tr, r.medio); f6cell(tr, r.tipo); f6cell(tr, r.asistio);
     f6cell(tr, '').appendChild(f6pill(r.estado));
+    f6cell(tr, r.responsable || 'Equipo ALTA');
     f6cell(tr, r.cobertura); f6cell(tr, f6fmt(r.publicaciones), 'num');
     f6cell(tr, '').appendChild(f6ver(r.verificacion));
     tb.appendChild(tr);
   });
-  if (!rows.length) { const tr = f6el('tr'); f6cell(tr, 'No hay contactos con estos filtros.').colSpan = 8; tb.appendChild(tr); }
+  if (!rows.length) { const tr = f6el('tr'); f6cell(tr, 'No hay contactos con estos filtros.').colSpan = 9; tb.appendChild(tr); }
 });
 
 // ---------- Next Steps ----------
@@ -1251,7 +1297,7 @@ dash.draw('calendar', (el) => {
     if (wk && !items.length) { const c = f6el('div', 'f6-day wk'); const h = f6el('div', 'h'); h.append(f6el('span', '', fmtW(d)), f6el('span', '', fmtD(d))); c.appendChild(h); return c; }
     const c = f6el('div', 'f6-day' + (iso === hoyIso ? ' today' : '') + (wk ? ' wk' : ''));
     const h = f6el('div', 'h'); h.append(f6el('span', '', fmtW(d)), f6el('span', '', fmtD(d))); c.appendChild(h);
-    items.forEach((r) => { const it = f6el('div', 'it' + (r.prioridad === 'Alta' ? ' alta' : ''), r.accion); it.title = `${r.tipo} · ${r.responsable}`; c.appendChild(it); });
+    items.forEach((r) => { const it = f6el('div', 'it' + (r.prioridad === 'Alta' ? ' alta' : ''), (r.estado === 'Realizado' ? '✓ ' : '') + r.accion); it.title = `${r.tipo} · ${r.responsable}`; c.appendChild(it); });
     return c;
   }));
 });
@@ -1260,7 +1306,7 @@ dash.draw('plantable', (tb) => {
   const fmt = d3.utcFormat('%d/%m');
   f6plan(s).slice().sort((a, b) => d3.ascending(a.fecha, b.fecha)).forEach((r) => {
     const tr = f6el('tr'); tr.dataset.key = encodeURIComponent(r.accion);
-    f6cell(tr, fmt(new Date(r.fecha + 'T00:00:00Z'))); f6cell(tr, r.accion); f6cell(tr, r.tipo);
+    f6cell(tr, fmt(new Date(r.fecha + 'T00:00:00Z'))); const ac = f6cell(tr, r.accion + ' '); if (r.estado === 'Realizado') ac.appendChild(f6el('span', 'f6-pill ok', 'Realizado')); f6cell(tr, r.tipo);
     f6cell(tr, '').appendChild(f6el('span', 'f6-pill ' + (r.prioridad === 'Alta' ? 'bad' : 'warn'), r.prioridad));
     f6cell(tr, r.impacto); f6cell(tr, r.facilidad); f6cell(tr, r.responsable);
     tb.appendChild(tr);
@@ -1286,6 +1332,7 @@ dash.draw('historial', (ul) => {
   const tabs = Array.from(document.querySelectorAll('.f6-tab'));
   const panels = Array.from(document.querySelectorAll('[data-panel]'));
   const open = (id) => {
+    if (id === 'proximos') id = 'learnings';
     if (!panels.some((p) => p.dataset.panel === id)) id = 'resumen';
     panels.forEach((p) => { p.hidden = p.dataset.panel !== id; });
     tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
@@ -1330,7 +1377,7 @@ dash.draw('historial', (ul) => {
 <script>
 dash.boot({
   grilla: 'data/grilla.json', cuentas: 'data/cuentas.json', seguimiento_base: 'data/seguimiento.json', insights: 'data/insights.json',
-  riesgos: 'data/riesgos.json', plan: 'data/plan.json', pendientes: 'data/pendientes.json', historial: 'data/historial.json',
+  riesgos: 'data/riesgos.json', plan: 'data/plan.json', pendientes: 'data/pendientes.json', historial: 'data/historial.json', learnings: 'data/learnings.json',
   comentarios: 'data/comentarios.csv', meta: 'data/meta.json'
 }).then((f) => {
   const t = 'Datos actualizados: ' + f.meta.actualizado;
