@@ -58,7 +58,7 @@ window.dash = (() => {
     colors: ['#c8102e', '#3d6fa8', '#8a8f98', '#2e8b57', '#a35ba0'],
     loader: (id, o) => { loaders[id] = o; },
     calc: (id, o) => { calcs[id] = o; },
-    setLink: () => requestAnimationFrame(api.redrawVisible),
+    setLink: () => setTimeout(api.redrawVisible, 0),
     data: (id) => {
       if (!ready) return { status: 'loading' };
       if (cache[id]) return cache[id];
