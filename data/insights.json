@@ -3,7 +3,7 @@
   "orden": 1,
   "top": 1,
   "hallazgo": "El legado del 600 y el reconocimiento a Fito Rayo fueron lo más replicado del día",
-  "evidencia": "Fito Rayo concentra 25 de los 77 registros del 10/11, y 7 cuentas de medios y periodistas (Altorque, Mujer y Estilo, Coral Menta, Tuerca Aventura, Soy Pao Leyton, Leo Pacheco y Auto de Ayer) publicaron historias sobre el reconocimiento o el 600 de 1969. El mensaje \"Legado del 600\" es el de mayor presencia (28 registros en 9 cuentas).",
+  "evidencia": "Fito Rayo concentra 25 registros del 10/11, y 7 cuentas de medios y periodistas (Altorque, Mujer y Estilo, Coral Menta, Tuerca Aventura, Soy Pao Leyton, Leo Pacheco y Auto de Ayer) publicaron historias sobre el reconocimiento o el 600 de 1969. El mensaje \"Legado del 600\" es el de mayor presencia (36 registros en 13 cuentas).",
   "interpretacion": "El encuentro entre el 600 clásico y el nuevo les dio a los medios una imagen y una historia propias, sobre todo en redes sociales.",
   "accion": "Enviar el comunicado de Fito Rayo (11/11) a medios lifestyle y regionales, y el comunicado n°3 de historia (14/11) para llevar este ángulo a la prensa web.",
   "fuente": "Grilla de clipping (corte 10/11, 22:00)",
@@ -46,10 +46,10 @@
  {
   "orden": 5,
   "top": 1,
-  "hallazgo": "La cobertura del día fue sobre todo en redes sociales, y en formatos que duran poco",
-  "evidencia": "60 de las 75 publicaciones únicas del 10/11 son historias de Instagram, que duran 24 horas. Las piezas permanentes son 15: 9 posts (dos de ellos colaborativos), 3 publicaciones de Facebook y 3 notas web (Rutamotor, The Clinic y Estilo Motor).",
-  "interpretacion": "Mucho volumen el día del evento, pero con poca permanencia y casi nada que aparezca en buscadores. La cobertura web todavía no despega.",
-  "accion": "Seguimiento a los asistentes que aún no publican (El Mostrador, Bandoleras y el diario El Mercurio) y test drives que generen notas de manejo.",
+  "hallazgo": "La cobertura sigue concentrada en historias, pero la prensa web ya empezó a crecer",
+  "evidencia": "63 de las 91 publicaciones únicas son historias de Instagram, que duran 24 horas. Las piezas permanentes suben a 28: 9 notas web, 13 posts, 5 publicaciones de Facebook y 1 video de YouTube. Se sumaron notas web de G5 Noticias y Autoguía (10/11) y de Autocosmos, Juan Parrilli Cars y Motor Prime (11/11).",
+  "interpretacion": "El volumen del día del evento empieza a transformarse en piezas que permanecen y aparecen en buscadores. La segunda ola debería venir con los test drives.",
+  "accion": "Seguimiento a El Mostrador y al diario El Mercurio, y test drives que generen notas de manejo.",
   "fuente": "Grilla de clipping",
   "verificacion": "Verificado",
   "tema": "Prensa"
@@ -57,10 +57,10 @@
  {
   "orden": 6,
   "top": 0,
-  "hallazgo": "Asistió el 100% de los invitados y 8 de los 10 medios ya tienen cobertura",
-  "evidencia": "Los 11 periodistas invitados (de 10 medios) asistieron, además de Fito Rayo. 7 medios publicaron en sus propios canales: Autocosmos, Rutamotor, Altorque, Mujer y Estilo, Estilo Motor, The Clinic y Tuerca Aventura. El Mercurio no tiene nota propia: Leo Pacheco publicó en su cuenta personal y en Auto de Ayer, su medio de historia. Faltan El Mostrador y Bandoleras.",
+  "hallazgo": "Asistió el 100% de los invitados y 9 de los 10 medios ya tienen cobertura",
+  "evidencia": "Los 11 periodistas invitados (de 10 medios) asistieron, además de Fito Rayo. 8 medios publicaron en sus propios canales: Autocosmos, Rutamotor, Altorque, Mujer y Estilo, Estilo Motor, The Clinic, Tuerca Aventura y Bandoleras. El Mercurio no tiene nota propia: Leo Pacheco publicó en su cuenta personal y en Auto de Ayer, su medio de historia. Falta El Mostrador.",
   "interpretacion": "El formato íntimo funcionó: casi todos los asistentes publicaron el mismo día. Pero una parte relevante de la cobertura está en cuentas personales de periodistas, no en los medios.",
-  "accion": "Seguimiento personalizado a El Mostrador y Bandoleras, y confirmar con Leo Pacheco si habrá nota en El Mercurio.",
+  "accion": "Seguimiento personalizado a El Mostrador y confirmar con Leo Pacheco si habrá nota en El Mercurio.",
   "fuente": "Lista de invitados · asistencia confirmada por Nicolás · grilla de clipping",
   "verificacion": "Verificado",
   "tema": "Convocatoria"
@@ -79,12 +79,12 @@
  {
   "orden": 9,
   "top": 0,
-  "hallazgo": "Alerta: el precio lista publicado no coincide con el del comunicado",
-  "evidencia": "Coral Menta publicó \"$25.790.000 de lista\", igual que la circular del evento. El comunicado de producto dice $24.990.000. El precio final de $23.490.000 con bonos sí coincide en todas las fuentes.",
-  "interpretacion": "No sabemos todavía cuál es el precio lista correcto. Si un medio usa el comunicado y otro la circular, la contradicción quedará publicada.",
-  "accion": "Validar con Fiat (Ricardo Passos) el precio lista y el bono TMP vigentes antes de corregir cualquier material. Hasta entonces, no difundir el precio lista.",
-  "fuente": "Grilla · comunicado de producto · circular",
-  "verificacion": "Por validar",
+  "hallazgo": "La diferencia de precio del comunicado quedó resuelta",
+  "evidencia": "Coral Menta publicó \"$25.790.000 de lista\", igual que la circular del evento, mientras el comunicado de producto decía $24.990.000. ALTA ya ajustó el precio del comunicado (11/11).",
+  "interpretacion": "El material oficial quedó alineado; las publicaciones anteriores al ajuste pueden mostrar el precio previo.",
+  "accion": "Usar el comunicado ajustado como única referencia de precio en entrevistas y test drives.",
+  "fuente": "Grilla de clipping · comunicado de producto · confirmación de ALTA",
+  "verificacion": "Verificado",
   "tema": "Mensajes"
  },
  {

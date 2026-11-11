@@ -9,14 +9,6 @@
  },
  {
   "orden": 2,
-  "riesgo": "Precio lista inconsistente",
-  "nivel": "Medio",
-  "verificacion": "Por validar",
-  "evidencia": "Comunicado: $24.990.000. Circular y Coral Menta: $25.790.000. Precio final con bonos ($23.490.000) coincide.",
-  "accion": "Validar con Fiat antes de corregir el comunicado."
- },
- {
-  "orden": 3,
   "riesgo": "Objeciones del público: precio y posventa",
   "nivel": "Medio",
   "verificacion": "Verificado",
@@ -24,7 +16,7 @@
   "accion": "Respuestas de comunidad sobre repuestos, posventa y precio vs. equipamiento."
  },
  {
-  "orden": 4,
+  "orden": 3,
   "riesgo": "Expectativa de híbrido completo",
   "nivel": "Medio",
   "verificacion": "Verificado",
@@ -32,11 +24,11 @@
   "accion": "Reforzar \"microhíbrido de 48 V, no se enchufa\" en test drives y entrevistas."
  },
  {
-  "orden": 5,
+  "orden": 4,
   "riesgo": "Cobertura efímera",
   "nivel": "Medio",
   "verificacion": "Verificado",
-  "evidencia": "60 de 75 publicaciones únicas son historias de 24 horas; solo 3 notas web.",
+  "evidencia": "63 de 91 publicaciones únicas son historias de 24 horas; 9 notas web.",
   "accion": "Generar notas de manejo con test drives y convertir historias en notas web."
  }
 ]

@@ -31,22 +31,12 @@
  },
  {
   "fecha": "2026-11-12",
-  "accion": "Seguimiento a El Mostrador, Bandoleras y El Mercurio: fotos del evento y ángulo sugerido",
+  "accion": "Seguimiento a El Mostrador y El Mercurio: fotos del evento y ángulo sugerido",
   "tipo": "Seguimiento",
   "prioridad": "Alta",
   "impacto": "Alto",
   "facilidad": "Fácil",
   "responsable": "Nicolás (ALTA)",
-  "estado": "Pendiente"
- },
- {
-  "fecha": "2026-11-11",
-  "accion": "Validar con Fiat el precio lista y bono TMP (comunicado vs. circular) antes de corregir materiales",
-  "tipo": "Mensajes",
-  "prioridad": "Alta",
-  "impacto": "Medio",
-  "facilidad": "Fácil",
-  "responsable": "Daniela Poblete / Ricardo Passos",
   "estado": "Pendiente"
  },
  {

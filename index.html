@@ -519,6 +519,7 @@ window.dash = (() => {
       <button class="f6-chip" data-fmt="Post IG" aria-pressed="false">Posts</button>
       <button class="f6-chip" data-fmt="Reel" aria-pressed="false">Reels</button>
       <button class="f6-chip" data-fmt="Facebook" aria-pressed="false">Facebook</button>
+      <button class="f6-chip" data-fmt="Video YouTube" aria-pressed="false">YouTube</button>
     </div>
     <div class="f6-gallery" id="galeria" data-draw="gallery" data-source="lanz"></div>
     <div class="f6-card" id="reutilizacion">
@@ -683,6 +684,7 @@ dash.calc('lanz', {
         if (/\(historia/i.test(titulo)) formato = 'Historia IG';
         else if (r.tipo_medio === 'Web') formato = 'Nota web';
         else if (r.tipo_medio === 'Facebook') formato = 'Facebook';
+        else if (/youtube/i.test(r.tipo_medio) || /youtu\.?be/.test(link)) formato = 'Video YouTube';
         else if (/\/reel\//.test(link)) formato = 'Reel';
         const fase = fecha_iso < lanzamiento ? 'Pre-evento' : (fecha_iso === lanzamiento ? 'Día del lanzamiento' : 'Post-lanzamiento');
         const c = cmap.get(medioGrilla.toLowerCase());

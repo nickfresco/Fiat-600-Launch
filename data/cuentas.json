@@ -134,5 +134,45 @@
   "medio_padre": "Fito Rayo",
   "tier": "",
   "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "G5 Noticias",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "G5 Noticias",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Autoguía",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Autoguía",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Juan Parrilli Cars",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Juan Parrilli Cars",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Motor Prime",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Motor Prime",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Bandoleras",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Bandoleras",
+  "tier": "",
+  "verificacion": "Verificado"
  }
 ]
