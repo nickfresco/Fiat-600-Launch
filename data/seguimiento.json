@@ -212,7 +212,7 @@
   "asistio": "—",
   "responsable": "Equipo ALTA",
   "estado_base": "PENDIENTE",
-  "match": "^$",
+  "match": "Motorfem|Biobio",
   "verificacion": "Verificado",
   "respuesta": "",
   "ultimo_contacto": "",

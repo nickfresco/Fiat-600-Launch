@@ -406,6 +406,7 @@ window.dash = (() => {
           <option value="">Todas</option>
           <option value="Instagram">Instagram</option>
           <option value="Facebook">Facebook</option>
+          <option value="TikTok">TikTok</option>
         </select>
       </label>
       <label for="f-ssent">Sentimiento
@@ -426,7 +427,7 @@ window.dash = (() => {
     </div>
     <div class="f6-kpis" id="kpis-conversacion">
       <div class="f6-kpi"><span class="n" data-draw="s_n" data-source="comentarios">—</span><span class="l">Comentarios de usuarios</span><span class="d">En la selección</span></div>
-      <div class="f6-kpi"><span class="n" data-draw="s_pub" data-source="comentarios">—</span><span class="l">Publicaciones con comentarios</span><span class="d">De 23 revisadas al 11/11, 12:50</span></div>
+      <div class="f6-kpi"><span class="n" data-draw="s_pub" data-source="comentarios">—</span><span class="l">Publicaciones con comentarios</span><span class="d">De 25 revisadas al 12/11, 14:30</span></div>
       <div class="f6-kpi"><span class="n" data-draw="s_neg" data-source="comentarios">—</span><span class="l">Negativos</span><span class="d">Porcentaje sobre la selección</span></div>
       <div class="f6-kpi"><span class="n" data-draw="s_pos" data-source="comentarios">—</span><span class="l">Positivos</span><span class="d">Porcentaje sobre la selección</span></div>
     </div>
@@ -531,6 +532,7 @@ window.dash = (() => {
       <button class="f6-chip" data-fmt="Reel" aria-pressed="false">Reels</button>
       <button class="f6-chip" data-fmt="Facebook" aria-pressed="false">Facebook</button>
       <button class="f6-chip" data-fmt="Video YouTube" aria-pressed="false">YouTube</button>
+      <button class="f6-chip" data-fmt="TikTok" aria-pressed="false">TikTok</button>
     </div>
     <div class="f6-gallery" id="galeria" data-draw="gallery" data-source="lanz"></div>
     <div class="f6-card" id="reutilizacion">
@@ -561,7 +563,7 @@ window.dash = (() => {
         <div class="f6-recon">
           <div><b class="n"><span data-draw="r_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</span> / <span data-draw="r_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</span></b><p>Medios invitados con cobertura: <span data-draw="r_medcanal" data-source="conv" data-field="medios_canal" data-row="0">—</span> en sus propios canales y <span data-draw="r_medpers" data-source="conv" data-field="medios_solo_personal" data-row="0">—</span> solo a través de la cuenta personal de su periodista (<span data-draw="r_lista_pers" data-source="conv" data-field="lista_solo_personal" data-row="0">—</span>). Sin cobertura: <span data-draw="r_lista_sin" data-source="conv" data-field="lista_sin" data-row="0">—</span>.</p></div>
           <div><b class="n" data-draw="r_perpub" data-source="conv" data-field="periodistas_publicaron" data-row="0">—</b><p>Periodistas invitados que publicaron, de <span data-draw="r_perinv" data-source="conv" data-field="periodistas_invitados" data-row="0">—</span> que asistieron. Estilo Motor tiene dos (Paola Leyton y Ángeles Gana).</p></div>
-          <div><b class="n" data-draw="r_contpub" data-source="conv" data-field="publicados" data-row="0">—</b><p>Contactos en estado "Publicado" en el tracker: los periodistas anteriores más <span data-draw="r_esp" data-source="conv" data-field="especiales_publicados" data-row="0">—</span> invitado especial (Fito Rayo). La entrevista de Biobío del 6/11 es previa y no se cuenta.</p></div>
+          <div><b class="n" data-draw="r_contpub" data-source="conv" data-field="publicados" data-row="0">—</b><p>Contactos en estado "Publicado" en el tracker: los periodistas anteriores más <span data-draw="r_esp" data-source="conv" data-field="especiales_publicados" data-row="0">—</span> invitado especial (Fito Rayo) y otros contactos con publicación desde el 10/11, como Motorfem (Biobío). La entrevista de Biobío del 6/11 es previa y no se cuenta.</p></div>
         </div>
       </div>
     </div>
@@ -717,6 +719,7 @@ dash.calc('lanz', {
         else if (r.tipo_medio === 'Web') formato = 'Nota web';
         else if (r.tipo_medio === 'Facebook') formato = 'Facebook';
         else if (/youtube/i.test(r.tipo_medio) || /youtu\.?be/.test(link)) formato = 'Video YouTube';
+        else if (/tiktok/i.test(r.tipo_medio) || /tiktok\.com/.test(link)) formato = 'TikTok';
         else if (/\/reel\//.test(link)) formato = 'Reel';
         const fase = fecha_iso < lanzamiento ? 'Pre-evento' : (fecha_iso === lanzamiento ? 'Día del lanzamiento' : 'Post-lanzamiento');
         const c = cmap.get(medioGrilla.toLowerCase());
@@ -1167,7 +1170,7 @@ dash.draw('r_tono', (el) => f6termo(el, true));
 dash.draw('r_formato', (el) => {
   const s = dash.data('lanz'); if (f6status(el, s)) return;
   const r = s.data.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
-  const nom = { 'Historia IG': 'Historias de Instagram', 'Post IG': 'Posts de Instagram', 'Nota web': 'Notas web', 'Facebook': 'Facebook', 'Reel': 'Reels', 'Video YouTube': 'Video YouTube' };
+  const nom = { 'Historia IG': 'Historias de Instagram', 'Post IG': 'Posts de Instagram', 'Nota web': 'Notas web', 'Facebook': 'Facebook', 'Reel': 'Reels', 'Video YouTube': 'Video YouTube', 'TikTok': 'TikTok' };
   const rows = Array.from(d3.rollup(r, (v) => new Set(v.map((p) => p.clave)).size, (p) => p.formato), ([formato, n]) => ({ formato, nombre: nom[formato] || formato, n, efimero: formato === 'Historia IG' })).sort((a, b) => b.n - a.n);
   f6hbar(el, rows, 'nombre', 'n', { label: 'Publicaciones únicas por formato', unit: 'publicaciones', color: (d) => d.efimero ? 'var(--cds-chart-muted)' : 'var(--f6-red)' });
 });
