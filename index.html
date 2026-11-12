@@ -251,7 +251,7 @@ window.dash = (() => {
       <p class="f6-eyebrow">ALTA Comunicación para Stellantis · Lanzamiento FIAT 600 Hybrid · Chile, 10 de noviembre de 2026</p>
       <div class="f6-rule"></div>
       <h1>FIAT 600 <span>Launch Intelligence Report</span></h1>
-      <p class="f6-lede">Asistieron <b data-draw="h_asist" data-source="conv" data-field="asistieron" data-row="0">—</b> de <b data-draw="h_invit" data-source="conv" data-field="periodistas_invitados" data-row="0">—</b> periodistas invitados y <b data-draw="h_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</b> de <b data-draw="h_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</b> medios ya tienen cobertura. Desde el evento hay <b data-draw="h_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</b> publicaciones únicas, con <b data-draw="h_pos" data-source="kpis" data-field="pct_positivo" data-row="0">—</b>% de tono positivo en el clipping.</p>
+      <p class="f6-lede">Asistieron <b data-draw="h_asist" data-source="conv" data-field="asistieron" data-row="0">—</b> de <b data-draw="h_invit" data-source="conv" data-field="periodistas_invitados" data-row="0">—</b> periodistas invitados y <b data-draw="h_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</b> de <b data-draw="h_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</b> medios ya tienen cobertura. La campaña suma <b data-draw="h_notas" data-source="kpis" data-field="notas_campana" data-row="0">—</b> notas en <b data-draw="h_cuentasc" data-source="kpis" data-field="cuentas_campana" data-row="0">—</b> medios y cuentas, con <b data-draw="h_posc" data-source="kpis" data-field="pct_positivo_campana" data-row="0">—</b>% de tono positivo en el clipping.</p>
     </div>
   </header>
 
@@ -270,15 +270,15 @@ window.dash = (() => {
     <header>
       <p class="f6-kicker">Resumen ejecutivo</p>
       <h2>Radiografía del lanzamiento</h2>
-      <p class="f6-sub">Evento íntimo en Hilaria, 10 de noviembre de 2026. Cifras desde el día del evento; cada publicación se cuenta una vez. <span class="f6-upd" id="f6-upd">Cargando datos…</span></p>
+      <p class="f6-sub">Evento íntimo en Hilaria, 10 de noviembre de 2026. Cifras de toda la campaña (previas, día del lanzamiento y posteriores), con el mismo criterio del One Pager. <span class="f6-upd" id="f6-upd">Cargando datos…</span></p>
     </header>
 
     <div class="f6-kpis" id="kpis">
-      <div class="f6-kpi big"><span class="n" data-draw="k_unicas" data-source="kpis" data-field="publicaciones_unicas" data-row="0">—</span><span class="l">Publicaciones únicas</span><span class="d"><span data-draw="k_perm" data-source="kpis" data-field="permanentes" data-row="0">—</span> permanentes · <span data-draw="k_hist" data-source="kpis" data-field="historias" data-row="0">—</span> historias</span></div>
-      <div class="f6-kpi big"><span class="n" data-draw="k_cuentas" data-source="kpis" data-field="cuentas" data-row="0">—</span><span class="l">Medios y cuentas con cobertura</span><span class="d"><span data-draw="k_web" data-source="kpis" data-field="notas_web" data-row="0">—</span> notas web</span></div>
+      <div class="f6-kpi big"><span class="n" data-draw="k_notas" data-source="kpis" data-field="notas_campana" data-row="0">—</span><span class="l">Notas publicadas</span><span class="d"><span data-draw="k_permc" data-source="kpis" data-field="permanentes_campana" data-row="0">—</span> permanentes · <span data-draw="k_histc" data-source="kpis" data-field="historias_campana" data-row="0">—</span> historias · <span data-draw="k_prev" data-source="kpis" data-field="previas_campana" data-row="0">—</span> previas al evento</span></div>
+      <div class="f6-kpi big"><span class="n" data-draw="k_cuentasc" data-source="kpis" data-field="cuentas_campana" data-row="0">—</span><span class="l">Medios y cuentas con cobertura</span><span class="d"><span data-draw="k_webc" data-source="kpis" data-field="web_campana" data-row="0">—</span> notas web</span></div>
       <div class="f6-kpi big"><span class="n"><span data-draw="k_medcob" data-source="conv" data-field="medios_cobertura" data-row="0">—</span><small> / <span data-draw="k_medinv" data-source="conv" data-field="medios_invitados" data-row="0">—</span></small></span><span class="l">Medios invitados con cobertura</span><span class="d">Sin cobertura: <span data-draw="k_sin" data-source="conv" data-field="lista_sin" data-row="0">—</span></span></div>
       <div class="f6-kpi big"><span class="n"><span data-draw="k_asist" data-source="conv" data-field="asistieron" data-row="0">—</span><small> / <span data-draw="k_invit" data-source="conv" data-field="periodistas_invitados" data-row="0">—</span></small></span><span class="l">Asistencia de invitados</span><span class="d">Convocatoria completa</span></div>
-      <div class="f6-kpi big"><span class="n"><span data-draw="k_pos" data-source="kpis" data-field="pct_positivo" data-row="0">—</span><small>%</small></span><span class="l">Tono positivo del clipping</span><span class="d">Publicaciones de medios y cuentas</span></div>
+      <div class="f6-kpi big"><span class="n"><span data-draw="k_posc" data-source="kpis" data-field="pct_positivo_campana" data-row="0">—</span><small>%</small></span><span class="l">Tono positivo del clipping</span><span class="d">Publicaciones de medios y cuentas</span></div>
     </div>
 
     <div class="f6-grid2 f6-visual" id="radiografia">
@@ -293,7 +293,7 @@ window.dash = (() => {
       <div class="f6-hz">
         <article><span class="big" data-draw="hz1" data-source="mensajes">—</span><span class="cap">registros con el mensaje de legado</span><h4>El legado del 600 y Fito Rayo, el ángulo más replicado</h4><p>El 600 de 1969 junto al nuevo Hybrid le dio a la prensa una historia propia.</p></article>
         <article><span class="big" data-draw="hz2" data-source="conv">—</span><span class="cap">medios invitados con cobertura</span><h4>Convocatoria completa y respuesta rápida</h4><p>Asistieron todos los invitados y casi todos publicaron el mismo día.</p></article>
-        <article><span class="big" data-draw="hz3" data-source="kpis">—</span><span class="cap">piezas permanentes</span><h4>La web crece, pero dominan las historias</h4><p>Los test drives deben sumar notas que permanezcan en el tiempo.</p></article>
+        <article><span class="big" data-draw="hz3" data-source="kpis">—</span><span class="cap">notas permanentes</span><h4>La web crece, pero dominan las historias</h4><p>Los test drives deben sumar notas que permanezcan en el tiempo.</p></article>
       </div>
     </div>
 
@@ -308,16 +308,16 @@ window.dash = (() => {
     <header>
       <p class="f6-kicker">Media Intelligence</p>
       <h2>Qué se publicó, dónde y en qué formato</h2>
-      <p class="f6-sub">Registros de la campaña "LANZAMIENTO FIAT 600" en la grilla de clipping. Por defecto se muestran solo los resultados del evento (desde el 10/11). Las piezas anteriores, como la entrevista de Biobío del 6/11, se ven como "Previas" y no se suman a los resultados.</p>
+      <p class="f6-sub">Registros de la campaña "LANZAMIENTO FIAT 600" en la grilla de clipping. Por defecto se muestra toda la campaña (previas, día del lanzamiento y posteriores), igual que el One Pager. Con el filtro de fase se puede ver solo el evento o solo las previas, como la entrevista de Biobío del 6/11.</p>
     </header>
     <div class="f6-filters" id="filtros-prensa">
       <label for="f-fase">Fase
         <select class="dash-select" id="f-fase" aria-label="Fase">
+          <option value="all">Toda la campaña</option>
           <option value="evento">Resultados del evento (desde 10/11)</option>
           <option value="Día del lanzamiento">Día del lanzamiento (10/11)</option>
           <option value="Post-lanzamiento">Posteriores (desde 11/11)</option>
           <option value="Pre-evento">Previas (antes del 10/11)</option>
-          <option value="all">Todas</option>
         </select>
       </label>
       <label for="f-canal">Canal
@@ -736,7 +736,7 @@ dash.calc('lanz', {
 
 dash.calc('kpis', {
   title: 'Indicadores del lanzamiento',
-  description: 'Totales de resultados del evento (desde el 10/11), sin registros repetidos; las publicaciones únicas cuentan cada enlace una vez.',
+  description: 'Totales de la campaña completa (previas, día del lanzamiento y posteriores), contando cada registro de la grilla como en el One Pager, y totales del evento (desde el 10/11) con publicaciones únicas por enlace.',
   inputs: ['lanz'],
   fn: (pubs) => {
     const res = pubs.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
@@ -744,6 +744,7 @@ dash.calc('kpis', {
     const permanentes = new Set(res.filter((p) => p.permanente === 'Sí').map((p) => p.clave));
     const pos = res.filter((p) => p.reputacion === 'Positivo').length;
     const pre = pubs.filter((p) => p.evento === 'No' && p.repetida === 'No');
+    const all = pubs.filter((p) => p.repetida === 'No');
     return [{
       registros_resultado: res.length,
       publicaciones_unicas: claves.size,
@@ -754,7 +755,14 @@ dash.calc('kpis', {
       pct_positivo: res.length ? Math.round(pos / res.length * 100) : 0,
       dia: new Set(res.filter((p) => p.fase === 'Día del lanzamiento').map((p) => p.clave)).size,
       posteriores: new Set(res.filter((p) => p.fase === 'Post-lanzamiento').map((p) => p.clave)).size,
-      previas: new Set(pre.map((p) => p.clave)).size
+      previas: new Set(pre.map((p) => p.clave)).size,
+      notas_campana: all.length,
+      cuentas_campana: new Set(all.map((p) => p.medio)).size,
+      web_campana: all.filter((p) => p.formato === 'Nota web').length,
+      permanentes_campana: all.filter((p) => p.permanente === 'Sí').length,
+      historias_campana: all.filter((p) => p.formato === 'Historia IG').length,
+      previas_campana: pre.length,
+      pct_positivo_campana: all.length ? Math.round(all.filter((p) => p.reputacion === 'Positivo').length / all.length * 100) : 0
     }];
   }
 });
@@ -900,7 +908,7 @@ window.f6mensajes = (res) => F6CLAVES.map(([mensaje, tipo, re]) => {
   const ej = hits.find((p) => p.formato !== 'Historia IG') || hits[0];
   return { mensaje, tipo, registros: hits.length, cuentas: new Set(hits.map((p) => p.medio)).size, nivel: f6nivel(hits.length), ejemplo: ej ? `${ej.medio}: ${ej.titulo}` : '—' };
 });
-window.f6 = window.f6 || { fase: 'evento', canal: '', formato: '', tier: '', medio: '', galFmt: '', sfase: 'Lanzamiento', splat: '', ssent: '', stema: '', spub: '', mcanal: '', mtipo: '', ttipo: '', test: '', tver: '', pprio: '', ptipo: '', presp: '' };
+window.f6 = window.f6 || { fase: 'all', canal: '', formato: '', tier: '', medio: '', galFmt: '', sfase: 'Lanzamiento', splat: '', ssent: '', stema: '', spub: '', mcanal: '', mtipo: '', ttipo: '', test: '', tver: '', pprio: '', ptipo: '', presp: '' };
 window.F6CANAL = { 'Medio': 'var(--f6-red)', 'Cuenta personal': '#e8838f', 'Creador': 'var(--cds-chart-muted)', 'Sin clasificar': 'var(--color-warn)' };
 window.F6SENT = { Positivo: 'var(--color-ok)', Neutro: 'var(--cds-chart-muted)', Negativo: 'var(--color-bad)' };
 window.f6fmt = (n) => (n == null || isNaN(n)) ? '—' : Number(n).toLocaleString('es-CL');
@@ -971,7 +979,7 @@ const f6num = (name, src, field, row) => dash.draw(name, (el) => {
   el.textContent = r ? (typeof r[field] === 'number' ? f6fmt(r[field]) : String(r[field] ?? '—')) : (Array.isArray(s.data) ? '—' : f6fmt(s.data));
 });
 [['k_sin','lista_sin'],['h_asist','asistieron'],['h_invit','periodistas_invitados'],['h_medcob','medios_cobertura'],['h_medinv','medios_invitados'],['k_medcob','medios_cobertura'],['k_medinv','medios_invitados'],['k_medcanal','medios_canal'],['k_medpers','medios_solo_personal'],['k_asist','asistieron'],['k_invit','periodistas_invitados'],['a_asist','asistieron'],['a_perpub','periodistas_publicaron'],['r_medcob','medios_cobertura'],['r_medinv','medios_invitados'],['r_medcanal','medios_canal'],['r_medpers','medios_solo_personal'],['r_lista_pers','lista_solo_personal'],['r_lista_sin','lista_sin'],['r_perpub','periodistas_publicaron'],['r_perinv','asistieron'],['r_contpub','publicados'],['r_esp','especiales_publicados'],['k_pub','publicados'],['k_seg','en_seguimiento'],['k_pend','pendientes']].forEach(([n, f]) => f6num(n, 'conv', f));
-[['k_cuentas','cuentas'],['k_web','notas_web'],['h_unicas','publicaciones_unicas'],['h_pos','pct_positivo'],['k_unicas','publicaciones_unicas'],['k_perm','permanentes'],['k_hist','historias'],['k_pos','pct_positivo'],['k_res','registros_resultado'],['a_unicas','publicaciones_unicas'],['a_cuentas','cuentas'],['a_web','notas_web']].forEach(([n, f]) => f6num(n, 'kpis', f));
+[['k_notas','notas_campana'],['k_cuentasc','cuentas_campana'],['k_webc','web_campana'],['k_permc','permanentes_campana'],['k_histc','historias_campana'],['k_prev','previas_campana'],['k_posc','pct_positivo_campana'],['h_notas','notas_campana'],['h_cuentasc','cuentas_campana'],['h_posc','pct_positivo_campana'],['k_cuentas','cuentas'],['k_web','notas_web'],['h_unicas','publicaciones_unicas'],['h_pos','pct_positivo'],['k_unicas','publicaciones_unicas'],['k_perm','permanentes'],['k_hist','historias'],['k_pos','pct_positivo'],['k_res','registros_resultado'],['a_unicas','publicaciones_unicas'],['a_cuentas','cuentas'],['a_web','notas_web']].forEach(([n, f]) => f6num(n, 'kpis', f));
 const lanzRow = (r) => r.fase === 'Lanzamiento';
 [['k_sneg','negativos'],['k_sn','comentarios'],['a_sn','comentarios'],['a_sneg','negativos'],['a_spos','positivos']].forEach(([n, f]) => f6num(n, 'soc_resumen', f, lanzRow));
 
@@ -1169,10 +1177,10 @@ dash.draw('chart_termometros', (el) => f6termo(el, false));
 dash.draw('r_tono', (el) => f6termo(el, true));
 dash.draw('r_formato', (el) => {
   const s = dash.data('lanz'); if (f6status(el, s)) return;
-  const r = s.data.filter((p) => p.evento === 'Sí' && p.repetida === 'No');
+  const r = s.data.filter((p) => p.repetida === 'No');
   const nom = { 'Historia IG': 'Historias de Instagram', 'Post IG': 'Posts de Instagram', 'Nota web': 'Notas web', 'Facebook': 'Facebook', 'Reel': 'Reels', 'Video YouTube': 'Video YouTube', 'TikTok': 'TikTok' };
-  const rows = Array.from(d3.rollup(r, (v) => new Set(v.map((p) => p.clave)).size, (p) => p.formato), ([formato, n]) => ({ formato, nombre: nom[formato] || formato, n, efimero: formato === 'Historia IG' })).sort((a, b) => b.n - a.n);
-  f6hbar(el, rows, 'nombre', 'n', { label: 'Publicaciones únicas por formato', unit: 'publicaciones', color: (d) => d.efimero ? 'var(--cds-chart-muted)' : 'var(--f6-red)' });
+  const rows = Array.from(d3.rollup(r, (v) => v.length, (p) => p.formato), ([formato, n]) => ({ formato, nombre: nom[formato] || formato, n, efimero: formato === 'Historia IG' })).sort((a, b) => b.n - a.n);
+  f6hbar(el, rows, 'nombre', 'n', { label: 'Notas por formato', unit: 'notas', color: (d) => d.efimero ? 'var(--cds-chart-muted)' : 'var(--f6-red)' });
 });
 dash.draw('r_msgs', (el) => {
   const s = dash.data('mensajes'); if (f6status(el, s)) return;
@@ -1181,7 +1189,7 @@ dash.draw('r_msgs', (el) => {
 });
 dash.draw('hz1', (el) => { const s = dash.data('mensajes'); const m = s.status === 'ok' ? s.data.find((x) => /legado/i.test(x.mensaje)) : null; el.textContent = m ? f6fmt(m.registros) : '—'; });
 dash.draw('hz2', (el) => { const s = dash.data('conv'); el.textContent = s.status === 'ok' ? `${s.data[0].medios_cobertura}/${s.data[0].medios_invitados}` : '—'; });
-dash.draw('hz3', (el) => { const s = dash.data('kpis'); el.textContent = s.status === 'ok' ? `${f6fmt(s.data[0].permanentes)} de ${f6fmt(s.data[0].publicaciones_unicas)}` : '—'; });
+dash.draw('hz3', (el) => { const s = dash.data('kpis'); el.textContent = s.status === 'ok' ? `${f6fmt(s.data[0].permanentes_campana)} de ${f6fmt(s.data[0].notas_campana)}` : '—'; });
 dash.draw('learnings', (el) => {
   const s = dash.data('learnings'); if (f6status(el, s)) return;
   el.replaceChildren(...s.data.map((r) => {
@@ -1349,8 +1357,8 @@ dash.draw('historial', (ul) => {
   const prensa = () => window.f6redrawPrensa();
   bind('f-fase', 'fase', prensa); bind('f-canal', 'canal', prensa); bind('f-formato', 'formato', prensa); bind('f-tier', 'tier', prensa); bind('f-medio', 'medio', prensa);
   document.querySelectorAll('#f-reset-prensa').forEach((b) => b.addEventListener('click', () => {
-    Object.assign(window.f6, { fase: 'evento', canal: '', formato: '', tier: '', medio: '' });
-    [['f-fase', 'evento'], ['f-canal', ''], ['f-formato', ''], ['f-tier', ''], ['f-medio', '']].forEach(([i, v]) => document.querySelectorAll('#' + i).forEach((s) => { s.value = v; }));
+    Object.assign(window.f6, { fase: 'all', canal: '', formato: '', tier: '', medio: '' });
+    [['f-fase', 'all'], ['f-canal', ''], ['f-formato', ''], ['f-tier', ''], ['f-medio', '']].forEach(([i, v]) => document.querySelectorAll('#' + i).forEach((s) => { s.value = v; }));
     prensa();
   }));
   const social = () => window.f6redrawSocial();
