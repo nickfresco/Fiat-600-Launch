@@ -190,5 +190,21 @@
   "medio_padre": "Biobío Chile",
   "tier": "",
   "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Más Motor",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Más Motor",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Tuercos",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Tuercos",
+  "tier": "",
+  "verificacion": "Verificado"
  }
 ]
