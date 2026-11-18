@@ -206,5 +206,469 @@
   "medio_padre": "Tuercos",
   "tier": "",
   "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Antofagasta",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Araucanía",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Arica",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Aysén",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Barnechea",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Calama",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Cerrillos",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Cerro Navia",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Chiloé",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Colina",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Concepción",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Conchalí",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Copiapó",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Coquimbo",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy El Bosque",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Estación Central",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Huechuraba",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Independencia",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Iquique",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy La Cisterna",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy La Florida",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy La Granja",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy La Pintana",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy La Reina",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Las Condes",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Lo Espejo",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Lo Prado",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Macul",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Magallanes",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Maipú",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Maule",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Melipilla",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy O'Higgins",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Osorno",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy PAC",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Peñalolén",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Providencia",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Pudahuel",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Puente Alto",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Puerto Montt",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Quilicura",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Quinta Normal",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Recoleta",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Renca",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy San Bernardo",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy San Joaquín",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy San Miguel",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy San Ramón",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Santiago",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Talagante",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Valdivia",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Valparaíso",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Vitacura",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Ñuble",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Hoy Ñuñoa",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Red Hoy",
+  "nombre": "Red Hoy",
+  "canal": "Medio",
+  "medio_padre": "Red Hoy",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "El Mostrador",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "El Mostrador",
+  "tier": "",
+  "verificacion": "Verificado"
+ },
+ {
+  "cuenta": "Aquí Te Dateamos",
+  "nombre": "",
+  "canal": "Medio",
+  "medio_padre": "Aquí Te Dateamos",
+  "tier": "",
+  "verificacion": "Verificado"
  }
 ]
