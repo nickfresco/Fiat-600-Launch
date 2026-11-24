@@ -2534,7 +2534,7 @@
   "reputacion": "Positivo"
  },
  {
-  "fila": "4873",
+  "fila": "4874",
   "marca": "FIAT",
   "fecha": "17/11/2026",
   "titulo": "En Altorque.com te invitamos a conocer más del sorprendente @fitorayo (historia)",
@@ -2544,6 +2544,48 @@
   "campana": "LANZAMIENTO FIAT 600",
   "gestion": "ALTA / Earned Media",
   "voceria": "Sin Vocería",
+  "tier": "Tier 1",
+  "reputacion": "Positivo"
+ },
+ {
+  "fila": "4937",
+  "marca": "FIAT",
+  "fecha": "21/11/2026",
+  "titulo": "Un 600 para la nueva generación (portada Automóviles)",
+  "medio": "El Mercurio",
+  "tipo_medio": "Print",
+  "link": "https://mediastation.simbiu.es/n/zTmFhROL",
+  "campana": "LANZAMIENTO FIAT 600",
+  "gestion": "ALTA / Earned Media",
+  "voceria": "Sin Vocería",
+  "tier": "Tier 1",
+  "reputacion": "Positivo"
+ },
+ {
+  "fila": "4938",
+  "marca": "FIAT",
+  "fecha": "21/11/2026",
+  "titulo": "Un viejo amigo está de regreso",
+  "medio": "El Mercurio",
+  "tipo_medio": "Print",
+  "link": "https://mediastation.simbiu.es/n/-YFxNUNv",
+  "campana": "LANZAMIENTO FIAT 600",
+  "gestion": "ALTA / Earned Media",
+  "voceria": "Sin Vocería",
+  "tier": "Tier 1",
+  "reputacion": "Positivo"
+ },
+ {
+  "fila": "4975",
+  "marca": "FIAT",
+  "fecha": "23/11/2026",
+  "titulo": "Conociendo las novedades de @fiatcl en @motorfem por @biobiotv (historia)",
+  "medio": "Paola Leyton (Estilo Motor)",
+  "tipo_medio": "Instagram",
+  "link": "interno:69b6aae93712c688",
+  "campana": "LANZAMIENTO FIAT 600",
+  "gestion": "ALTA / Earned Media",
+  "voceria": "Ricardo Passos, Brand Manager de Fiat Chile.",
   "tier": "Tier 3",
   "reputacion": "Positivo"
  }

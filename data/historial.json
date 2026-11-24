@@ -58,5 +58,11 @@
   "version": "v10 · comunicado de Fito Rayo",
   "cambio": "Primera versión: grilla de clipping, lista de invitados, envío del comunicado, insights y plan de 15 días.",
   "fuente": "Grilla · Gmail · lista de invitados"
+ },
+ {
+  "fecha": "2026-11-24 18:23",
+  "version": "Actualización automática",
+  "cambio": "Lectura de la grilla de clipping: 185 registros de la campaña (3 piezas nuevas o modificadas). Las publicaciones repetidas no se suman.",
+  "fuente": "Grilla de clipping"
  }
 ]
